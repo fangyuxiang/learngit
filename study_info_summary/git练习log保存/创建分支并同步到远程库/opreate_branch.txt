@@ -1,18 +1,24 @@
-1. 添加远程库
-   git remote add "git@github.com:fangyuxiang/learning.git"
-   
-2. 查看已添加的远程库
-   git remote -v
+1. 远程库的添加和查看
+   a): git remote add "git@github.com:fangyuxiang/learning.git" (远程库默认名字：origin)
+       git remote add origin "git@github.com:fangyuxiang/learning.git"(等价于上句)
 
-3. 本地分支同步到远程分支。
+   b): git remote add new_name "git@github.com:fangyuxiang/learning.git" (此时关联的远程库的名字：mayue)
+
+   c): git remote -v: 查看远程库信息，可以看到两个远程库：
+	mayue   git@gitee.com:studyRestful/learngit.git (fetch)
+	mayue   git@gitee.com:studyRestful/learngit.git (push)
+	origin  git@github.com:fangyuxiang/learngit.git (fetch)
+	origin  git@github.com:fangyuxiang/learngit.git (push)
+
+2. 本地分支同步到远程分支。
    a): git checkout -b sub_branch: 创建并切换到分支。
        git push origin sub_branch: 如果远程库上没有此分支，则自动创建。
        
-   b): git push local_branch:remote_branch: 如果远程库上没有此分支，则自动创建。
+   b): git push origin local_branch:remote_branch: 如果远程库上没有此分支，则自动创建。
    
    注意：例如第一次采用的是方案a,那么后续推动到远程分支的时候，也应该采用方案a.
    
-4. 本地分支与远程分支进行关联。
-    git branch --set-upstream-to=origin/<branch> local_branch
-	git branch --set-upstream-to local_branch  origin/<branch>
+3. 本地分支与远程分支进行关联。
+    a):git branch --set-upstream-to=origin/<branch> local_branch
+    b):git branch --set-upstream-to local_branch  origin/<branch>
 	

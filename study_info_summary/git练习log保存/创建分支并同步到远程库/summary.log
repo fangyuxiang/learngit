@@ -86,43 +86,45 @@ fyx@Joe MINGW64 /e/git_config_test/home (master)
 		Total 2 (delta 0), reused 0 (delta 0)
 		To git@github.com:fyxgit/home.git
 		* [new branch]      dev -> dev
-
+	d): 删除远程库中的某个分支: push空到指定分支
+		git push origin :branch
+		
 8. 从远程分支中更新代码到本地分支中。
-a): 第一次更新失败：没有将本地分支与远程对应的分支进行关联。
-	$ git pull
-		There is no tracking information for the current branch.
-		Please specify which branch you want to merge with.
-		See git-pull(1) for details.
-
-		git pull <remote> <branch>
-
-		If you wish to set tracking information for this branch you can do so with:
-
-			git branch --set-upstream-to=origin/<branch> dev
-
-b): 将本地分支与远程对应分支进行关联
-	method 1:
-		$ git branch --set-upstream-to=origin/dev dev
-	method 2:
-		$ git branch --set-upstream-to local_branch origin/branch
-c): 再次进行更新
-	fyx@Joe MINGW64 /e/git_config_test/home (dev)
+	a): 第一次更新失败：没有将本地分支与远程对应的分支进行关联。
 		$ git pull
-		Updating c6b2ae6..055e729
-		Fast-forward
-		hello.py | 1 +
-		1 file changed, 1 insertion(+)
+			There is no tracking information for the current branch.
+			Please specify which branch you want to merge with.
+			See git-pull(1) for details.
+
+			git pull <remote> <branch>
+
+			If you wish to set tracking information for this branch you can do so with:
+
+				git branch --set-upstream-to=origin/<branch> dev
+
+	b): 将本地分支与远程对应分支进行关联
+		method 1:
+			$ git branch --set-upstream-to=origin/dev dev
+		method 2:
+			$ git branch --set-upstream-to local_branch origin/branch
+	c): 再次进行更新
+		fyx@Joe MINGW64 /e/git_config_test/home (dev)
+			$ git pull
+			Updating c6b2ae6..055e729
+			Fast-forward
+			hello.py | 1 +
+			1 file changed, 1 insertion(+)
 		
 9. 远程库的添加和查看
-a): 远程库名称默认
-	git remote add "git@github.com:fangyuxiang/learning.git" (远程库默认名字：origin)
-    git remote add origin "git@github.com:fangyuxiang/learning.git"(等价于上句)
-b): 自定义远程库名称
-	好处：存在多个远程库，我们使用不同的名称来标识不同的远程库。
-	git remote add mayue "git@gitee.com:studyRestful/learngit.git"
-c): 查看远程库信息：
-	git remote -v
-	gitee    git@gitee.com:liaoxuefeng/learngit.git (fetch)
-	gitee    git@gitee.com:liaoxuefeng/learngit.git (push)
-	github    git@github.com:michaelliao/learngit.git (fetch)
-	github    git@github.com:michaelliao/learngit.git (push)
+	a): 远程库名称默认
+		git remote add "git@github.com:fangyuxiang/learning.git" (远程库默认名字：origin)
+		git remote add origin "git@github.com:fangyuxiang/learning.git"(等价于上句)
+	b): 自定义远程库名称
+		好处：存在多个远程库，我们使用不同的名称来标识不同的远程库。
+		git remote add mayue "git@gitee.com:studyRestful/learngit.git"
+	c): 查看远程库信息：
+		git remote -v
+		gitee    git@gitee.com:liaoxuefeng/learngit.git (fetch)
+		gitee    git@gitee.com:liaoxuefeng/learngit.git (push)
+		github    git@github.com:michaelliao/learngit.git (fetch)
+		github    git@github.com:michaelliao/learngit.git (push)

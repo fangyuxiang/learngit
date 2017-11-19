@@ -1,0 +1,32 @@
+1. push使提示：! [rejected] dev -> master (non-fast-forward)
+	a): 错误信息
+		$ git push mayue dev:master
+		To git@gitee.com:studyRestful/learngit.git
+		 ! [rejected]        dev -> master (non-fast-forward)
+		error: failed to push some refs to 'git@gitee.com:studyRestful/learngit.git'
+		hint: Updates were rejected because a pushed branch tip is behind its remote
+		hint: counterpart. Check out this branch and integrate the remote changes
+		hint: (e.g. 'git pull ...') before pushing again.
+		hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+	b): 解决方法：--force
+		git push mayue dev:master --force
+		Total 0 (delta 0), reused 0 (delta 0)
+		To git@gitee.com:studyRestful/learngit.git
+		 + 63d7431...8ce6923 dev -> master (forced update)
+2. push提示： ! [rejected]        master -> master (fetch first)
+	a)：出错信息
+		 git push mayue master
+		To git@gitee.com:studyRestful/learngit.git
+		 ! [rejected]        master -> master (fetch first)
+		error: failed to push some refs to 'git@gitee.com:studyRestful/learngit.git'
+		hint: Updates were rejected because the remote contains work that you do
+		hint: not have locally. This is usually caused by another repository pushing
+		hint: to the same ref. You may want to first integrate the remote changes
+		hint: (e.g., 'git pull ...') before pushing again.
+		hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+	b): 解决方法：
+		git pull --rebase
+		error: Pull is not possible because you have unmerged files.
+		hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+		hint: as appropriate to mark resolution and make a commit.
+		fatal: Exiting because of an unresolved conflict.

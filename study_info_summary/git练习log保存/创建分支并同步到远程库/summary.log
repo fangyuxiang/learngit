@@ -1,20 +1,20 @@
-1. ±¾µØ´´½¨Git¿â²¢³õÊ¼»¯
+1. æœ¬åœ°åˆ›å»ºGitåº“å¹¶åˆå§‹åŒ–
 fyx@Joe MINGW64 /e/git_config_test
    $ git init
    Initialized empty Git repository in E:/git_config_test/.git/
 
-2. ÅäÖÃÈ«¾Ö±äÁ¿£ºÓÃ»§ÃûºÍÃÜÂë
+2. é…ç½®å…¨å±€å˜é‡ï¼šç”¨æˆ·åå’Œå¯†ç 
 fyx@Joe MINGW64 /e/git_config_test/home (master)
    $ git config --global user.email "fyx123456@163.com"
    $ git config --global user.name "fqy"
 
-3. È«¾Ö±äÁ¿ÅäÖÃ³É¹¦µÄ±êÖ¾£º¿ÉÒÔÕı³£Ìá½»´úÂëµ½±¾µØ¿â¡£
+3. å…¨å±€å˜é‡é…ç½®æˆåŠŸçš„æ ‡å¿—ï¼šå¯ä»¥æ­£å¸¸æäº¤ä»£ç åˆ°æœ¬åœ°åº“ã€‚
 fyx@Joe MINGW64 /e/git_config_test/home (master)
    $ git commit -m "add git_config_test.py for test"
 	[master 7c0f4fb] add git_config_test.py for test
 	1 file changed, 0 insertions(+), 0 deletions(-)
 	create mode 100644 git_config-test.py
-		£¨Èç¹ûÃ»ÓĞÅäÖÃÓÃ»§Ãû»òÔòÃÜÂë»á³öÏÖÈçÏÂÌáÊ¾ĞÅÏ¢£º
+		ï¼ˆå¦‚æœæ²¡æœ‰é…ç½®ç”¨æˆ·åæˆ–åˆ™å¯†ç ä¼šå‡ºç°å¦‚ä¸‹æç¤ºä¿¡æ¯ï¼š
 			fyx@Joe MINGW64 /e/git_config_test/home (master)
 			$ git commit -m "add git_config_test.py for test"
 
@@ -29,54 +29,54 @@ fyx@Joe MINGW64 /e/git_config_test/home (master)
 			Omit --global to set the identity only in this repository.
 
 			fatal: unable to auto-detect email address (got 'fyx@Joe.(none)')	
-		£©
+		ï¼‰
 
-4. ±¾µØ´´½¨·ÖÖ§²¢±à¼­¡£
-	a): ´´½¨·ÖÖ§²¢ÇÒÇĞ»»µ½¸Õ´´½¨µÄ·ÖÖ§ÉÏ¡£
+4. æœ¬åœ°åˆ›å»ºåˆ†æ”¯å¹¶ç¼–è¾‘ã€‚
+	a): åˆ›å»ºåˆ†æ”¯å¹¶ä¸”åˆ‡æ¢åˆ°åˆšåˆ›å»ºçš„åˆ†æ”¯ä¸Šã€‚
 		fyx@Joe MINGW64 /e/git_config_test/home (master)
 			$ git checkout -b dev
 			Switched to a new branch 'dev'
 	
-	b): Ìí¼ÓÎÄ¼ş£¬²¢Ìá½»µ½±¾µØ¿â
+	b): æ·»åŠ æ–‡ä»¶ï¼Œå¹¶æäº¤åˆ°æœ¬åœ°åº“
 		fyx@Joe MINGW64 /e/git_config_test/home (dev)
 			$ ls
 			git_config-test.py  README.md
-		###´´½¨ÎÄ¼ş
-		fyx@Joe MINGW64 /e/git_config_test/home (dev)
+		###åˆ›å»ºæ–‡ä»¶
+		fyx@Joe MINGW64 /e/git_config_test/home (dev)	
 			$ touch hello.py
-		###Ìí¼ÓÎÄ¼şµ½Ôİ´æÇø
+		###æ·»åŠ æ–‡ä»¶åˆ°æš‚å­˜åŒº
 		fyx@Joe MINGW64 /e/git_config_test/home (dev)
 			$ git add hello.py
-		###Ìá½»ÎÄ¼şµ½±¾µØ¿â
+		###æäº¤æ–‡ä»¶åˆ°æœ¬åœ°åº“
 		fyx@Joe MINGW64 /e/git_config_test/home (dev)
 			$ git commit -m "add hello.py file"
 			[dev c6b2ae6] add hello.py file
 			1 file changed, 0 insertions(+), 0 deletions(-)
 			create mode 100644 hello.py
-		###¿ÉÒÔÍ¨¹ıstatusÈ·ÈÏĞŞ¸ÄµÄµØ·½ÒÔÈ«²¿Ìá½»¡£
+		###å¯ä»¥é€šè¿‡statusç¡®è®¤ä¿®æ”¹çš„åœ°æ–¹ä»¥å…¨éƒ¨æäº¤ã€‚
 		fyx@Joe MINGW64 /e/git_config_test/home (dev)
 			$ git stauts
 
-5. git commit -a -mºÍ git commit -amµÄÇø±ğ£º
-	a): git commit -a -m£ºÊÊÓÃÓÚÎÄ¼şÎ´¸ú×Ù£¬¼´ÔİÊ±Ã»ÓĞaddµ½Ôİ´æÇø¡£
-	b): git commit -am: ÊÊÓÃÓÚÒÑ¸ú×ÙµÄÎÄ¼ş£¬¼´ÒÑ¾­addµ½Ôİ´æÇø£¬¶ÔÒÑÓĞÎÄ¼şĞŞ¸Äºó£¬Ö±½Ó¸üĞÂ¼´¿É¡£
+5. git commit -a -må’Œ git commit -amçš„åŒºåˆ«ï¼š
+	a): git commit -a -mï¼šé€‚ç”¨äºæ–‡ä»¶æœªè·Ÿè¸ªï¼Œå³æš‚æ—¶æ²¡æœ‰addåˆ°æš‚å­˜åŒºã€‚
+	b): git commit -am: é€‚ç”¨äºå·²è·Ÿè¸ªçš„æ–‡ä»¶ï¼Œå³å·²ç»addåˆ°æš‚å­˜åŒºï¼Œå¯¹å·²æœ‰æ–‡ä»¶ä¿®æ”¹åï¼Œç›´æ¥æ›´æ–°å³å¯ã€‚
 
-6. ÎÄ¼ş»ØÍË£º
-	a): Ìí¼Óµ½Ôİ´æÇø£¬µ«»¹Ã»ÓĞ¸üĞÂµ½±¾µØ¿â¡£
+6. æ–‡ä»¶å›é€€ï¼š
+	a): æ·»åŠ åˆ°æš‚å­˜åŒºï¼Œä½†è¿˜æ²¡æœ‰æ›´æ–°åˆ°æœ¬åœ°åº“ã€‚
 		git reset HEAD fielname
-	b): ÒÑ¸üĞÂµ½±¾µØ¿â£¬µ«»¹Ã»ÓĞ¸üĞÂµ½Ô¶³Ì¿â¡£
+	b): å·²æ›´æ–°åˆ°æœ¬åœ°åº“ï¼Œä½†è¿˜æ²¡æœ‰æ›´æ–°åˆ°è¿œç¨‹åº“ã€‚
 		step one:
-			git reset --hard file_id(´ÓÔ¶³Ì¿â»ØÍËµ½±¾µØ¿â)
+			git reset --hard file_id(ä»è¿œç¨‹åº“å›é€€åˆ°æœ¬åœ°åº“)
 		step two:
 			git reset HEAD filename
 			
-6. ½«±¾µØ·ÖÖ§ÍÆËÍµ½Ô¶³Ì¿â¡£
-a): ½«µ±Ç°¿âpushµ½Ô¶³ÌÖ¸¶¨¿â£º
-	git push origin target-branch£¨master/dev:Èç¹ûÔ¶³Ì¿âÉÏÃ»ÓĞ´Ë·ÖÖ§£¬Ôò×Ô¶¯´´½¨¡££©
-b): Ö¸¶¨±¾µØ¿âµ½Ô¶³ÌÖ¸¶¨¿â£º
-	git push origin local_branch:remote_branch (Èç¹ûÔ¶³Ì¿âÉÏÃ»ÓĞ´Ë·ÖÖ§£¬Ôò×Ô¶¯´´½¨¡£)
+7. å°†æœ¬åœ°åˆ†æ”¯æ¨é€åˆ°è¿œç¨‹åº“ã€‚
+	a): å°†å½“å‰åº“pushåˆ°è¿œç¨‹æŒ‡å®šåº“ï¼š
+	git push origin target-branchï¼ˆmaster/dev:å¦‚æœè¿œç¨‹åº“ä¸Šæ²¡æœ‰æ­¤åˆ†æ”¯ï¼Œåˆ™è‡ªåŠ¨åˆ›å»ºã€‚ï¼‰
+	b): æŒ‡å®šæœ¬åœ°åº“åˆ°è¿œç¨‹æŒ‡å®šåº“ï¼š
+	git push origin local_branch:remote_branch (å¦‚æœè¿œç¨‹åº“ä¸Šæ²¡æœ‰æ­¤åˆ†æ”¯ï¼Œåˆ™è‡ªåŠ¨åˆ›å»ºã€‚)
 
-c): Fox exsample: ½«µ±Ç°µÄdev¿âÍÆËÍµ½Ô¶³Ìdev·ÖÖ§¡£ 
+	c): Fox exsample: å°†å½“å‰çš„devåº“æ¨é€åˆ°è¿œç¨‹devåˆ†æ”¯ã€‚ 
 	fyx@Joe MINGW64 /e/git_config_test/home (dev)
 		$ git push origin dev
 		Counting objects: 2, done.
@@ -87,8 +87,8 @@ c): Fox exsample: ½«µ±Ç°µÄdev¿âÍÆËÍµ½Ô¶³Ìdev·ÖÖ§¡£
 		To git@github.com:fyxgit/home.git
 		* [new branch]      dev -> dev
 
-7. ´ÓÔ¶³Ì·ÖÖ§ÖĞ¸üĞÂ´úÂëµ½±¾µØ·ÖÖ§ÖĞ¡£
-a): µÚÒ»´Î¸üĞÂÊ§°Ü£ºÃ»ÓĞ½«±¾µØ·ÖÖ§ÓëÔ¶³Ì¶ÔÓ¦µÄ·ÖÖ§½øĞĞ¹ØÁª¡£
+8. ä»è¿œç¨‹åˆ†æ”¯ä¸­æ›´æ–°ä»£ç åˆ°æœ¬åœ°åˆ†æ”¯ä¸­ã€‚
+a): ç¬¬ä¸€æ¬¡æ›´æ–°å¤±è´¥ï¼šæ²¡æœ‰å°†æœ¬åœ°åˆ†æ”¯ä¸è¿œç¨‹å¯¹åº”çš„åˆ†æ”¯è¿›è¡Œå…³è”ã€‚
 	$ git pull
 		There is no tracking information for the current branch.
 		Please specify which branch you want to merge with.
@@ -100,12 +100,12 @@ a): µÚÒ»´Î¸üĞÂÊ§°Ü£ºÃ»ÓĞ½«±¾µØ·ÖÖ§ÓëÔ¶³Ì¶ÔÓ¦µÄ·ÖÖ§½øĞĞ¹ØÁª¡£
 
 			git branch --set-upstream-to=origin/<branch> dev
 
-b): ½«±¾µØ·ÖÖ§ÓëÔ¶³Ì¶ÔÓ¦·ÖÖ§½øĞĞ¹ØÁª
+b): å°†æœ¬åœ°åˆ†æ”¯ä¸è¿œç¨‹å¯¹åº”åˆ†æ”¯è¿›è¡Œå…³è”
 	method 1:
 		$ git branch --set-upstream-to=origin/dev dev
 	method 2:
 		$ git branch --set-upstream-to local_branch origin/branch
-c): ÔÙ´Î½øĞĞ¸üĞÂ
+c): å†æ¬¡è¿›è¡Œæ›´æ–°
 	fyx@Joe MINGW64 /e/git_config_test/home (dev)
 		$ git pull
 		Updating c6b2ae6..055e729
@@ -113,14 +113,14 @@ c): ÔÙ´Î½øĞĞ¸üĞÂ
 		hello.py | 1 +
 		1 file changed, 1 insertion(+)
 		
-8. Ô¶³Ì¿âµÄÌí¼ÓºÍ²é¿´
-a): Ô¶³Ì¿âÃû³ÆÄ¬ÈÏ
-	git remote add "git@github.com:fangyuxiang/learning.git" (Ô¶³Ì¿âÄ¬ÈÏÃû×Ö£ºorigin)
-    git remote add origin "git@github.com:fangyuxiang/learning.git"(µÈ¼ÛÓÚÉÏ¾ä)
-b): ×Ô¶¨ÒåÔ¶³Ì¿âÃû³Æ
-	ºÃ´¦£º´æÔÚ¶à¸öÔ¶³Ì¿â£¬ÎÒÃÇÊ¹ÓÃ²»Í¬µÄÃû³ÆÀ´±êÊ¶²»Í¬µÄÔ¶³Ì¿â¡£
+9. è¿œç¨‹åº“çš„æ·»åŠ å’ŒæŸ¥çœ‹
+a): è¿œç¨‹åº“åç§°é»˜è®¤
+	git remote add "git@github.com:fangyuxiang/learning.git" (è¿œç¨‹åº“é»˜è®¤åå­—ï¼šorigin)
+    git remote add origin "git@github.com:fangyuxiang/learning.git"(ç­‰ä»·äºä¸Šå¥)
+b): è‡ªå®šä¹‰è¿œç¨‹åº“åç§°
+	å¥½å¤„ï¼šå­˜åœ¨å¤šä¸ªè¿œç¨‹åº“ï¼Œæˆ‘ä»¬ä½¿ç”¨ä¸åŒçš„åç§°æ¥æ ‡è¯†ä¸åŒçš„è¿œç¨‹åº“ã€‚
 	git remote add mayue "git@gitee.com:studyRestful/learngit.git"
-c): ²é¿´Ô¶³Ì¿âĞÅÏ¢£º
+c): æŸ¥çœ‹è¿œç¨‹åº“ä¿¡æ¯ï¼š
 	git remote -v
 	gitee    git@gitee.com:liaoxuefeng/learngit.git (fetch)
 	gitee    git@gitee.com:liaoxuefeng/learngit.git (push)

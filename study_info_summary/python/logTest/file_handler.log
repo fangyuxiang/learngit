@@ -1,0 +1,4 @@
+2017-11-18 10:26:54,331 - file_example - INFO - info message
+2017-11-18 10:26:54,331 - file_example - WARNING - warn message
+2017-11-18 10:26:54,331 - file_example - ERROR - error message
+2017-11-18 10:26:54,331 - file_example - CRITICAL - critical message

@@ -1,0 +1,10 @@
+2017-11-18 20:42:13,690 - configExample - DEBUG -debug message
+2017-11-18 20:42:13,694 - configExample - INFO -info message
+2017-11-18 20:42:13,703 - configExample - WARNING -warn message
+2017-11-18 20:42:13,707 - configExample - ERROR -error message
+2017-11-18 20:42:13,714 - configExample - CRITICAL -critical message
+2017-11-18 20:42:19,657 - configExample - DEBUG -debug message
+2017-11-18 20:42:19,657 - configExample - INFO -info message
+2017-11-18 20:42:19,661 - configExample - WARNING -warn message
+2017-11-18 20:42:19,668 - configExample - ERROR -error message
+2017-11-18 20:42:19,673 - configExample - CRITICAL -critical message

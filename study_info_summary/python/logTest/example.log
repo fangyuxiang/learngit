@@ -1,0 +1,28 @@
+DEBUG:root:This is debug messages!
+INFO:root:This is info messages!
+WARNING:root:This is  warnging message!
+DEBUG:root:This is debug messages!
+INFO:root:This is info messages!
+WARNING:root:This is  warnging message!
+DEBUG:root:This is debug messages!
+INFO:root:This is info messages!
+WARNING:root:This is  warnging message!
+DEBUG:root:This is debug messages!
+INFO:root:This is info messages!
+WARNING:root:This is  warnging message!
+
+
+[handler_fileHandler]
+name=file_test
+level=DEBUG
+formatter=simpleFormatter
+
+,fileHandler
+
+
+[handler_fileHandler]
+class=FileHandler
+name='file_config.log'
+level=DEBUG
+formatter=simpleFormatter
+args=(sys.stdout,)

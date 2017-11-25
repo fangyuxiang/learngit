@@ -104,9 +104,9 @@ fyx@Joe MINGW64 /e/git_config_test/home (master)
 
 	b): 将本地分支与远程对应分支进行关联
 		method 1:
-			$ git branch --set-upstream=origin/dev dev
+			$ git branch --set-upstream-to=origin/dev dev
 		method 2:
-			$ git branch --set-upstream local_branch origin/branch
+			$ git branch --set-upstream-to local_branch origin/branch
 	c): 再次进行更新
 		fyx@Joe MINGW64 /e/git_config_test/home (dev)
 			$ git pull

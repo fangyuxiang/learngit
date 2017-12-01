@@ -38,11 +38,11 @@ class Login:
     def __init__(self, session):
         if not session:
             requests.adapters.DEFAULT_RETRIES = 5
-            self.session = requests.Session()
-            self.session.cookies = cookielib.LWPCookieJar(filename='cookie')
-            self.session.keep_alive = False
+            self.__session = requests.Session()
+            self.__session.cookies = cookielib.LWPCookieJar(filename='cookie')
+            self.__session.keep_alive = False
             try:
-                self.session.cookies.load(ignore_discard=True)
+                self.__session.cookies.load(ignore_discard=True)
             except:
                 print('Cookie 未能加载')
             finally:

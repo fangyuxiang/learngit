@@ -130,7 +130,7 @@ b): 修改profile配置文件
 	方法一：切换到root权限进行修改（如果不切换，会提示无权限修改）
 		sudo -i
 	方法二：sed命令修改：（对于https://要加转义）
-	sudo sed -i "s/EXTRA_ARGS='/EXTRA_ARGS='--registry-mirror=https:\/\/fn43kvml.mirror.aliyuncs.com/g"
+	sudo sed -i "s/EXTRA_ARGS='/EXTRA_ARGS='--registry-mirror=https:\/\/fn43kvml.mirror.aliyuncs.com/g" /var/lib/boot2docker/profile
 c): 退出虚拟机，到windows提示符界面，重启虚拟机
 	docker-machine restart default
 ```

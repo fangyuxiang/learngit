@@ -123,7 +123,7 @@ a): cetenos 6.9进行说明
 ### Windows
 
 ```markdown
-添加加速器地址到：/var/lib/boot2docker/profile
+第一种：添加加速器地址到：/var/lib/boot2docker/profile
 a): 登陆到虚拟机（默认：default虚拟机）
 	docker-machine ssh default
 b): 修改profile配置文件
@@ -133,6 +133,8 @@ b): 修改profile配置文件
 	sudo sed -i "s/EXTRA_ARGS='/EXTRA_ARGS='--registry-mirror=https:\/\/fn43kvml.mirror.aliyuncs.com/g" /var/lib/boot2docker/profile
 c): 退出虚拟机，到windows提示符界面，重启虚拟机
 	docker-machine restart default
+第二种：新建虚拟机时就添加地址进去
+	docker-machine create --engine-registry-mirror=https://fn43kvml.mirror.aliyuncs.com -d virtualbox virtualName
 ```
 
 ## 镜像加速器
@@ -390,7 +392,8 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
    | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
    | 创建container                              | docker create                            | docker create fyx/auto_test              |
    | 运行container                              | docker run                               | docker run fyx/auto_test /bin/bash       |
-   | 运行container后进入其bash控制台                   | docker run -t -i images /bin/bash        | docker run -t -i ubuntu /bin/bash        |
+   |                                          | docker run -itd images /bin/bash         | docker run -itd ubuntu /bin/bash         |
+   | 运行container后进入其bash控制台: 交互式和tty          | docker run -t -i images /bin/bash        | docker run -t -i ubuntu /bin/bash        |
    | 运行container并让其在后台运行，并端口映射                | docker run -p [port in container]:[port in pysical system] -d [image] command | docker run p 5000:5000 -d training/webapp python app.py |
    | 查看正在运行的所有container信息                     | docker ps                                | docker ps                                |
    | 查看最后创建的container                         | docker ps -l                             | docker ps -l                             |
@@ -489,4 +492,92 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
    * 安装Django and PostgreSQL
 
      * [官方参考网站]: https://docs.docker.com/compose/django/#define-the-project-components
+
+     ```markdown
+     命令：
+     	docker run -d -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=123 mysql:latest
+     登陆：
+     	mysql -h192.168.99.101 -uroot -p123 -P3306
+     ```
+
+
+
+### docker mysql相关
+
+1. pull mysql images
+
+   ```markdown
+   a): 查看当前mysql镜像版本信息：
+   	docker search mysql
+   b): 拉取指定mysql镜像版本
+   	docker pull mysql:latest
+   ```
+
+2. 启动mysql和连接测试
+
+   * 运行mysql容器：指定不同端口和访问机台
+
+     ```markdown
+     a): 指定特定的端口
+     	docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin mysql:latest
+     	确认运行OK： docker ps(有相关的顿口映射信息：0.0.0.0:3306->3306/tcp) 
+     	e421a67040c9     mysql:latest       6 minutes        0.0.0.0:3306->3306/tcp   mysql
+     b): 随机生成宿主机台的端口：(-P改成大写即可)
+     	docker run -d --name random -P -e MYSQL_ROOT_PASSWORD=admin mysql:latest
+     	92c0823cb0bd     mysql:latest       11 minutes    0.0.0.0:32768->3306/tcp   random
+     c): 为了安全考虑，只希望宿主机台可以访问mysql服务。
+     	docker run -d --name security -p 127.0.0.1:3311:3306 -e MYSQL_ROOOT_PASSWORD=admin mysql:latest
+     	cd8d75c7aba9     mysql:latest       11 minutes   127.0.0.1:3309->3306/tcp  security
+     ```
+
+
+   * 进入容器内连接mysql
+
+     ```markdown
+     a): 进入容器内
+     	docker exec -it mysql /bin/bash
+     b): 本地建立mysql连接
+     	mysql -uroot -padmin -P3306
+     ```
+
+   * mysql客户端远程连接
+
+     ```markdown
+     命令：
+     	mysql -h192.168.99.101 -uroot -padmin -P3306
+     备注：
+     	-h: 指的是docker的宿主机器IP
+     ```
+
+3. mysql数据本地持久化
+
+   * 挂载本地文件到mysql容器
+
+     ```markdown
+     命令：
+     	docker run -d -p 3306:3306 --name mysql -v /share_dir/docker_fyx/mysql/data/:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=admin mysql:latest
+     备注：
+     	mysql中的目录： /var/lib/mysql
+     ```
+
+   * 下次访问容器，直接使用本地化保存的数据
+
+     ```markdown
+     a): -v挂载的目录路径使用本地化保存的路径一致即可。
+     b): 命令同上，可自由选择--name的值。
+     ```
+
+### 目录挂载,实现数据持久化
+
+[参考网站]: http://blog.csdn.net/magerguo/article/details/72514813
+
+```markdown
+a): 格式
+	-v  host_path:container_path
+b): 举例: 宿主机的/test目录挂载到容器的/soft目录
+	docker run -it --name fyx -v /test:/soft ubuntu:14.04 /bin/bash
+	
+```
+
+
 

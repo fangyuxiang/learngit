@@ -174,5 +174,56 @@
     logger.critical("critical message")
     ```
 
-    ​
 
+
+### 深拷贝与浅拷贝区别
+
+1. 概念和区别
+
+   ```markdown
+   a): Python中对象的赋值都是进行对象引用(内存地址)传递。
+   b): 使用copy.copy(),可以进行对象的浅拷贝，它复制了对象，但对于对象中的元素，依然使用原始的引用。
+   c): 如果需要复制一个容器对象，以及它里面的所有元素(包含元素的子元素)，可以使用copy.deepcopy()进行深拷贝。
+   d): 如果元祖变量中只包含了原子类型对象，则不能深拷贝。
+   ```
+
+2. 实例演练
+
+   * 浅拷贝
+
+     ```markdown
+     import copy
+      
+     will = ["Will", 28, ["Python", "C#", "JavaScript"]]
+     wilber = copy.copy(will)
+      
+     print id(will)
+     print will
+     print [id(ele) for ele in will]
+     print id(wilber)
+     print wilber
+     print [id(ele) for ele in wilber]
+      
+     will[0] = "Wilber"
+     will[2].append("CSS")
+     ```
+
+     ![2017-12-10_python浅拷贝示意图](E:\git_save_study\study_info_summary\python\screen\2017-12-10_python浅拷贝示意图.png)
+
+   * 深拷贝
+
+     ```markdown
+     import copy
+      
+     will = ["Will", 28, ["Python", "C#", "JavaScript"]]
+     wilber = copy.deepcopy(will)
+
+     will[0] = "Wilber"
+     will[2].append("CSS")
+     ```
+
+     ![2017-12-10_python深拷贝示意图](E:\git_save_study\study_info_summary\python\screen\2017-12-10_python深拷贝示意图.png)
+
+   * 元祖变量只包含原子类型对象，不能进行深拷贝。
+
+     ![2017-12-10_元素只包含原子类不能进行深拷贝](E:\git_save_study\study_info_summary\python\screen\2017-12-10_元素只包含原子类不能进行深拷贝.png)

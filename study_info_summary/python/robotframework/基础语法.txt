@@ -1,0 +1,457 @@
+1. 变量声明、赋值及使用。
+	a): 变量声明
+		1）变量表示：变量标识符{变量名}。---Scalar变量用$作为标识符，List变量用@作为标识符。
+	
+	b): 变量赋值
+		1）默认情况下RF里面的变量都是字符型的。
+			Fox example:
+				${text}       Set Variable   123 / {123}
+				${string}     Set Variable   hello world / {hello world}
+				${flag}		  Set Variable   false
+				
+		2) 	定义变量是特殊情况。
+			Fox example:   
+				${flag}       Set Variable  ${false}    ===> Flase
+	
+	c): 变量作用域
+		1) Set Global Variable   ---设定全局级变量
+		2) Set Suite Variable    ---设定suite级变量
+		3) Set Test Variable  	 ---设定case级变量
+		
+	d): Scalar变量使用
+		1)、判断中使用
+			Fox example:
+				${text}				Set Variable  123
+				Run Keyword If		${text} == 123 		log    ok
+				
+		2)、字符串使用
+			Fox example:
+				${text}				Set Variable  123
+				log					aaa${log}bbb			===> aaa123bbb
+				
+		3)、参与运算
+			Fox example:
+				${text}				Set Variable  123
+				${sum}				Evaluate		int(${text})+123  <标准模式>
+				${sum}				Evaluate		${text}+123  	  <非标准模式>
+				log  				${sum}			===> 246
+				
+				${random}			Evaluate 		random.randint(0,sys.maxint)	random,sys
+				result:  ===> ${random} = 397302704
+	
+	e): List变量声明和使用
+		1)、声明
+			格式1： 
+				@{list_1}			Set Variable  		1	2	3
+			格式2:
+				@{list_2}			Create List			a	b	c
+				
+		2)、log与log many的输出区别：
+			log：
+				log  ${list_2}					===> 输出结果：[u'a', u'b', u'c']
+				log many  ${list_2}				===> 输出结果：[u'a', u'b', u'c']
+			log many:
+				log many a{list_2}				===> 输出结果：a
+															   b
+														       c
+		3)、list元素获取
+			方法1：${list[index]}
+				Fox example:
+					获取list第一元素： ${list_1[0]}
+			
+			方法2：@{list}[index]
+				Fox example:
+					获取list第一元素： @{list_1}[0]
+		4)、list长度获取
+			Get Length ${list}
+			
+2. 流程关键字汇总
+	a): Run Keyword If:
+		1)、单重条件判断
+			a. 单一条件：
+				${status}		Set Variable		1
+				Run Keyword If 	${status} <= 3		log  "right"
+				...				ELSE				log  "error"
+			b. 多个条件表达式：(字符串判断：变量需要加单引号或者双引号)
+				Run Keyword If  '${color}' == 'Red' or '${size}' == 'Small'		log 	"right"
+		
+		2)、多重条件判断（...ELSE IF ...ELSE）
+			${status}			Set Variable		1
+			Run Keyword If		${status} <= 3  	log 	"right"
+			...					Else If 			${status} > 4  	log 	"error"
+			...					Else				log 	"end"
+			
+		3)、利用IF关键字给变量赋值。（即在Run Keyword If关键字左侧留参数接收返回值）
+			a. Run Keyword If
+				${status}		Set Variable		1
+				${result}		Run Keyword If 		${status} <= 3		Set Variable    "right"
+								...					Else				Set Variable	"error"
+			
+			b. Set Variable If
+				${status}		Set Variable		1
+				${result}		Set Variable If		${status} <= 3		"right"
+		
+		4)、执行多条语句以及多个条件语句判断。
+			a. if 后面连接多个执行语句：
+					Run Keyword If  1==1  Run Keywords log 1 AND log 2
+
+			b. if 后面复杂条件判断：
+					Run Keyword If  ${condition1} == 1 and ${condtion2} == 2 (两个判断条件在同一单元格中。)
+
+			注意：a：中的AND需要大写， b: 中的and需要小写
+
+	b)、Run Keyword unless
+			---与if关键字相反，只有当判断条件为“false”时，后面的语句才会执行。
+			Run Keyword Unless	'${color}' == 'Red' or '${size}' == 'Small'		log		"right"
+	
+	c)、For loop循环
+		1)、For-Loop-In-Range
+			a)、IN RANGE 参数说明：1 9 3：
+				1：为初始值、	9：为循环上限，不包括其本身。	3、循环变量的递增值。
+			:FOR			${index}		IN RANGE	1	5   2	
+							Log 	${index}
+			result:===>   1  3
+		
+		2)、For-Loop-Elements
+			a)、当个变量循环：
+				@{items}		Create List		Star Trek	Star Wars
+				:FOR			${element}			IN	@{items}
+								log		${element}
+								\\ 去掉空格
+								${format}		Replace String		${element}	${SPACE}	${EMPTY}
+								Log		${formate}
+				result:===>  first_output: Star Trek    format_output: StarTrek
+		
+			b)、多个循环变量
+				@{list} 		Create 	List 	1	2	3	4
+				:FOR			${var1}		${var2}		IN 	@{list}
+								Log Many	i=${var1}		n=${var2}
+				result: ===>	i=1 
+								n=2
+								i=3
+								n=4
+					
+		3)、For-Loop-Exiting
+			:FOR		${element}		IN 		@{items}
+			
+			a)、跳出循环方式一：
+					Run Keyword If  	'${element}' == 'Star Trek'		Exit For Loop
+			
+			b)、跳出循环方式二: 
+					Exit For Loop If    '${element}' == 'Star Trek'
+					
+		4)、Repeat-Action
+			a)、重复执行单个关键字：
+				Repeat Keyword		2		log   "hell0 world"
+					result:===> Repeating keyword, round 1/2.
+								INFO : "Hello World!"
+								INFO : Repeating keyword, round 2/2.
+								INFO : "Hello World!"	
+			
+			b)、重复执行多个关键字：
+				step one: 将多个关键字进行封装。
+				
+				step two: 通过Repeat Keyword进行调用。
+				
+		5)、Template: 实现将关键字驱动变成数据驱动。
+			[Template] log			===> 注意事项：a)、一个用例中只能使用一个template关键字。b)、引用template后，用例步骤只能是参数。
+			hello
+			world 
+			测试结果： INFO:hello
+					   INFO:world
+			
+			备注：Template与Repeat Keyword两者的异同：
+				a)、相同点：实现了脚本循环执行。
+				b)、不同点：
+					1)、Template：循环次数的控制由输入的行参数决定。Repeat Keyword: 循环次数由输入的次数参数决定。
+					2)、Template：执行的行参数可能不同，可能相同。  Repeat Keyword: 执行的参数都相同。
+	d): 日常搜索汇总
+		1、Set Browser Implicit Wait | seconds: 设置浏览器等待时间（单位：秒）
+		
+		2、Set Selenium Speed: 设置操作脚本等待时间。
+			--- Set Selenium Speed 0.3seconds （注意：这个keyword一旦操作，后续的每个脚本执行步骤都要等待0.3秒）
+			
+		3、Run keyword and return status: 运行关键字，并返回一个状态(true,false)。
+		
+		4、Wait Until Keyword Succeeds | timeout, retry_interval,name,*args
+			等到指定关键字成功或给定的超时过期。 | timeout:表示超时 | retry_interval:表示重新操作间隔。
+			| name：表示要等待的关键字名称 | *args: 表示所需等待加载的locator
+			Fox Example:  Wait Until Keyword Succeeds  10sec  0sec Element Should Be Visible xpath=//*[@id="ke"]
+		
+		5、点击对话框：适用有对话框出现或者没有
+			${status}	Run Keyword And Return Status	Wait Until Keyword Succeeds	5sec	0sec	Element Should Be Visible	$locator
+			Run keyword If   ${status}	Click Element  $locator
+	
+	e): return相关关键字汇总说明:
+		1、Return From Keyword: 后面跟返回值。					 				例如： Return From Keyword	hello_string
+		
+		2、Return From Keyword If: 根据判断条件来返回具体数值。  				例如： Return From Keyword If  '${status}' == "OK"  hello_string
+			
+		3、Run Keyword And Return: 返回关键字执行的结果。		 				例如:  Run Keyword And Return   Get Text  css=#information
+		
+		4、Run Keyword And Return If: 根据判断条件来返回执行关键字的结果。		例如： Run Keyword And Return If  '${status}' == "OK"  Get Text  css=#information
+		
+		5、Run keyword and return status: 运行关键字，并返回一个状态(true,false)。可直接用于判断， 
+				例如： ${get_status}   Run keyword and return status  Click Element  css=.inforClas
+						Run keyword If   ${get_status} == True		log ok																		
+3. 快捷键汇总。
+	a)、ride快捷键汇总
+		搜索关键字	===》 F5
+		重命名		===》 F2
+		屏蔽代码	===》 ctrl + #
+		取消屏蔽 	===》 ctrl + $
+		关键字补全  ===》 ctrl + shift + space
+		插入行		===》 ctrl + i
+		删除行		===》 ctrl + d
+		插入单元格  ===》 ctrl + shift + i
+		删除单元格  ===》 ctrl + shift + d
+		向上移动测试用例	===》ctrl + up
+		向下移动测试用例	===》ctrl + down
+		显示关键字信息		===》ctrl + 鼠标悬浮
+		保存整个工程		===》ctrl + shfit + s
+		保存局部工程(鼠标停放处)	===》ctrl + s
+	
+	b)、Chrome浏览器
+		1)、打开与关闭操作：(不区分大小写)
+			Ctrl + n: 打开新的窗口。
+			Ctrl + Shift + n: 以隐藏模式打开新的窗口。
+			Alt  + F4: 关闭当前窗口。
+			Ctrl + t:  打开新标签页。
+			Ctrl + F4: 关闭当前标签页。（Ctrl + w）
+			Ctrl + Shift + T：重新打开上一次关闭的标签。
+			
+		2)、链接操作
+			按住ctrl键，点击链接，则在新的标签页中打开链接，但自身还是停留在当前页面。
+			按住ctrl + shift键，点击链接，则在新的标签页中打开链接，同时切换到新的标签页。
+			按住shift键，点击链接，则在新的窗口中打开链接，同时切换到新的窗口中。
+		
+		3)、网址导航操作：
+			补全'www','com': 网址栏中输入网址名字，Ctrl + Enter,自动补全www,com并进行访问。例如：zhibo8 ===》 www.zhibo8.com
+			复制网址并访问： ctrl + l / ctrl + d / F6选中网址，Alt + Enter: 访问刚才选中的网址。
+		
+		4)、标签页切换：
+			Ctrl + PageUp 、Ctrl + Shift + Tab: 切换到上一个标签页。
+			Ctrl + PageDown 、Ctrl + Tab: 切换到下一个标签页。
+			Ctrl + 9:   切换到最后一个标签页。
+			Ctrl + 1~8: 切换到对应的标签页 
+
+4. 元素定位
+	a): id和name定位
+		Fox example:
+			id： id=username		name：name=wd
+	
+	b): xpath定位
+		1)、绝对路径：xpath=/html/body/div[1]/div/table/tbody/tr/td/div/table/tbody/tr[3]/td/div/button
+		
+		2)、相对路径：xpath=//*[@id="login-box"]/div[6]/button
+		
+		3)、元素本身属性：xpath=//input[@id='kw']		xpath=//input[@type='su']	xpath=//*[@id='kw']		xpath=//span[text()='概况']
+		
+		4)、找上级：
+			父上级： 	xpath=//span[@class='bg_info']/input
+			爷爷上级：  xpath=//form[@id='form1']/span/input
+		
+		5)、布尔值写法：xpath=//input[@id='kw' and @name='wd']
+	
+	c)、CSS定位
+		1)、通过class属性定位： 	css=.s_ipt
+		
+		2)、通过id定位：			css=#kw				css=#su
+		
+		3)、通过标签名：			css=input			css=span
+		
+		4)、通过父子关系：			css=input>span
+		
+		5)、通过属性定位：			css=input[type='text']		css=input[id='login-name']
+		
+		6)、通过组合定位： 			css=span.biger>input.sub_biger		父元素标签名：span，他有一个class属性值为：biger。子元素标签名：input，class属性值：sub_biger
+
+5. 编码问题：
+	a)、Python2.7使用的编码是:ascii，容易造成：ascii' codec can't decode byte 0xe6 in position 16: ordinal not in range(128)
+		问题原因：内存中使用的unicode编码，这就造成与ascii冲突。
+		解决方法：将Python默认的ascii编码设定成“utf-8”编码。
+			import sys 
+			reload(sys)
+			sys.setdefaultencoding('utf-8')
+	
+	b)、ascii、utf-8、unicode三者的说明
+		1)、基础知识：
+				1.1、计算机只识别二进制编码，即：0、1。故所有的操作对象都需要转成数值才可以正常操作。
+				1.2、一个字节(byte)由8个比特(bite)构成。故一个字节能表示的最大整数：2^8=255。如果要表示更大的整数，则可以使用多个字节。例如：2个字节：65535
+				1.3、由于计算机是美国人发明的，最初只有127个字符被编码到计算机。故使用一个字节足矣。也就是指:ASCII
+				1.4、中文字符远不止255个，故一个字节编码满足不了需求，至少需要两个字节，故中国制定了GB2312编码。同理其他国家也有其相对应的编码表。
+				1.5、由于每个国家都有自己的编码表，这就造成在读语言混合的文本中，容易形成乱码。故就有同一编码：unicode。
+				1.6、unicode编码一般采用两个字节表示一个字符，少数偏僻的字符会采用4个字节。
+				1.7、英文字符其实采用一个字节就可以完成编码，如果使用unicode进行编码的话，这就会造成存储空间的浪费。而且不利于传输和存储。所以根据这种情况，
+					 就有了另外一种编码，那就是：utf-8编码。厉害之处在于：可以把unicode字符根据其数子的大小编码成1-6个字符，通常英文字母被编码成一个字节，
+					 汉字被编码成三个字节。
+		
+		2)、三者区别与联系:
+				2.1、ASCII编码为：1个字节、unicode编码为：2个字节，UTF-8编码：英文字母(1个)，中文(3个)。
+				2.2、大量只支持ascii的历史遗留软件都可以在utf-8编码下继续工作。
+				2.3、在计算机内存中，统一使用Unicode编码，当需要保存到硬盘或者传输的时候，被转化成UTF-8编码。
+					 用记事本编辑的时候，将文件中的utf-8编码的字符转化成unicode字符到内存中，编辑完成后，在转成成utf-8保存到文件中。
+
+6. robotframework命名规则：
+	a)、变量命名
+		1)、全局变量：以G为开头，其余单词大写。例如：G_HDM_SHARE_IPv4
+		
+		2)、测试套件范围变量：以下划线分开。   例如：${user_name} / ${user_Name}
+		
+		3)、测试用例或者关键字中变量：首个单词首字母小写。  例如：${userName} / ${tradePwd}
+		
+		4)、关键字定义的形参：${userName}。如果在测试用例中返回了带userName的字段，为了区别我们一般将其存储在变量: ${res_userName}
+	
+	b)、关键字命名
+		1)、resource.txt下的关键字：每个单词的首字母大写，并且连接在一起,区别与系统关键字。 例如：DelUser      ===>func_keywords:目前用中文代替了。
+		
+		2)、测试套件中定义的关键字：单词与单词之间用下划线隔开，分隔线之间的单词或者词组首字母小写。 例如：health_eventLog_saveLogs  ===> testflow_keywords
+
+7. python知识点汇总:
+	a)、文件目录
+		1)、搜索指定目录文件中的目标文件。
+			例如：搜索D:\\Test_Dir中的所有.log文件。
+			def check_file(object):
+				for parent, list_dir, list_file in os.walk(file_path):
+					for sub_file in list_file:
+						if sub_file.end_with(.log)
+							yield os.path.join(parent,sub_file)   ===> 通过yield关键字，使其成为一个generator（生成器）
+			    
+				文件遍历： for file  in check_file():			  ===> check_file()：iterable对象，不占用内存空间。
+								print(file)						  ===> 通过for循环即可遍历所有file。(遇到yield后返回数值，下次迭代的时候从上次的位置开始。)
+		
+		2)、判断文件是否存在:  os.path.exists(file_path)
+		
+		3)、输出指定目录文件加中的所有文件：
+			items = os.listdir(file_path)
+			for f in items:
+				print(f)
+	
+	b)、random模块
+		1)、常用的功能：
+			1.1: 获取随机整数：random.randint(0,99)。       	===> 10
+			1.2：获取随机偶数：random.randrange(0,100,2)		===> 42
+			1.3: 获取当个随机字符： random.choice('abcn123')	===> a
+			1.4: 获取多个随机字符：	random.sample('abcn123',3)  ===> ['a', 'n', '3']
+			
+		2)、与string结合使用：
+			2.1：string.letters   			
+				 string.ascii_letters		===> 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+				 
+				 string.ascii_lowercase		===> 'abcdefghijklmnopqrstuvwxyz'
+				 
+				 string.ascii_uppercase		===> 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+			
+			2.2: 随机获取固定长度的随机字符
+				2.2.1：''.join(random.choice(string.letters),for x in range(5))		===> aCDed
+				
+				2.2.2：''.join(random.sample(string.letters,5)						===> aCDed
+			
+			2.3: 随机混合字符和数字
+				hybird_string = string.letters + string.digitals + "_"
+				''.join(random.sample(hybird_string,5)		===> RP5dH
+	
+	c)、argparse模块
+		1)、作用：用于解析命令行参数。
+
+		2)、执行步骤：
+			1. import argparse （导入模块）
+			2. parser = argparse.ArgumentParser() （创建一个解析器对象，里面可以添加参数，下面详解）
+			3. parser.add_argument() (定义参数）
+			4. parser.parser_args()  (解析命令行参数）
+		
+		3)、参数详细说明
+			1、ArgumentParser()参数说明：
+				-description: 命令行帮助的开始文字。
+				-epilog：命令行帮助的结尾文字。
+				-prog：程序的名字（default：sys.argv[0]）
+				-prefix_chars: 命令的前缀，默认是-，prefix_chars="-+/"。
+				-fromfile_prefix_chars: 命令行参数从文件中读取。（default:None),如果fromfile_prefix_chars='@',那么命令行参数格式调用格式：@args.txt
+				-argparse.ArgumentDefaultsHelpFormatter: 在每个选项的帮助信息后面输出他们对应的缺省值，如果有设置的话。这个最常用吧！
+			
+			例如：parser = argparse.ArgumentParser(description='This is a description of %(prog)s', epilog='This is a epilog of %(prog)s', prefix_chars="-+", fromfile_prefix_chars="@", formatter_class=argparse.ArgumentDefaultHelpeFormatter)
+			
+			2、add_argument()参数说明：
+				-可选位置：
+					parser.add_argument('-f', '--file', help='this is mode argument location is optional')
+				-位置固定的选项：
+					parser.add_argument("fixed")
+				-nargs: 指定参数后面的value有多少个，例如，我们希望使用-n 1 2 3 4. nargs="+": +代表至少一个，？代表0个或1个，*代表0个或者多个。
+					parser.add_argument("-n", "--num", nargs="+" type=int)
+				-default：指定默认值
+					parser.add_argument("--name", default="admin", nargs='?')
+				-type: 指定参数的类型：int、float
+					parser.add_argument('-d', '--digital', type=int, default=3)
+				-choices: 设定参数值得范围，如果choices中的类型不是字符串，需要指定type
+					parser.add_argument('-y', choices=['a','b','c'])
+				-required: 设置参数必须选择
+					parser.add_argument('-z', choices=['a', 'b', 'c'], required=True)
+				-dest: 解析的数值保存在其他属性中
+					parser.add_argument("-q", dest="other")
+
+			3、从文件中读取参数
+				1. Python 脚本部分
+					import argparse
+					parser = argparse.ArgumentParser(description='This is test for read arguments from file', fromfile_prefix_chars='@')
+
+					parser.add_argument('--username', help="login in username")
+					parser.add_argument('-pwd', help='login in password')
+					parser.add_argument('--ip', help='hdm website address')
+					
+					args = parser.arg_parse_args()
+					print args
+
+				2. 参数配置文件: 一行一个参数。（filename：args_cfg.txt）
+					--username
+					admin
+					-pwd
+					Password@_
+					--ip
+					172.16.11.104
+					(备注：上述参数可以不分先后顺序)
+				
+				3. 命令执行：python  test.py @args_cfg.txt
+
+8.	robotframework sshLibrary:
+	a)、分隔符和换行符：
+		1)、分隔符：forward slash(/) 和 backslash(\)
+			1.1、Unix-like machines：使用forwaslash(/)
+			1.2、Windows： 使用backslash(\).
+			1.3、robotframework如果使用backslash的话，需要转移，格式：double backslash(\\)。
+			
+		2)、换行符：
+			2.1、Unix-like machines：LF（same as \n）
+			2.2、windows:  CRLF(same as \r\n)
+
+9.  Selenium 1.0 与 Selenium 2.0
+	a)、Selenium 1.0:
+		1.1: Selenium IDE： 是嵌入到Firefox浏览器中的一个插件，简单实现操作浏览器的录制与回放功能。
+				
+		1.2: Selenium Grid：
+			 1.2.1：自动化测试辅助工具。
+			 1.2.2：并行执行
+			 1.2.3：通过一个主机统一控制用例在不同环境、不同浏览器下执行。
+			 
+		1.3: Selenium RC：Selenium家族核心，可以使用不同语言编写测试用例脚本，通过Selenium RC的服务器作为代理服务器去访问应用，达到测试目的。
+			1.3.1：Client：编写脚本，控制selenium server库。
+			
+			1.3.2：Server：负责控制浏览器行为。
+				Launcher: 		启用浏览器，把Selenium Core加载到浏览器中，并把浏览器的代理设为：Selenium Server的Http Proxy。
+				
+				Selenium Core:	是一堆JavaScripts函数的集合，通过JS函数实现对浏览器的操作。
+				
+				Http Proxy:		绕过JS安全沙箱。
+	
+	b)、Selenium 2.0:
+		1.1: 简单讲： Selenium 2.0 = Selenium 1.0 + WebDriver
+			 实际上主推的是WebDriver，WebDriver是Selenium RC的替代品，因Selenium为了往下兼容，故没有取消SeleniumRC。如果没有历史原因，首选WebDriver。
+		
+		1.2：特点：
+			a. WebDriver通过原生浏览器支持或者浏览器扩展直接控制浏览器。
+			
+			b. 浏览器原厂支持，每个浏览器对应于不同的webdriver。
+			
+			c. 取代了被嵌入web的javascripts,与浏览器的紧密集成支持创建更高级的测试，避免了JavaScript 安全模块导致的限制。
+			
+			d. 利用操作系统集的调用，模拟用户输入。
+		

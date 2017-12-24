@@ -10,7 +10,7 @@
 
 * 安装方法：
 
-  * 满足上述所有条件：
+  * 满足上述所有条件,直接下载windows安装程序即可：
 
     a): 开启windows的Hyper-V
 
@@ -58,10 +58,11 @@
        2.3: 解决方法
 
        ```markdown
-       a): 下载对应的版本的boot2docker.iso放到路劲下：	C:\Users\Administrator\.docker\machine\cache，重启启动即可。
-       b): 版本对应关系：
-       	DockerToolbox-17.10.0-ce 
-       c): boot2docker存放路径：
+       a): 下载对应的版本的boot2docker.iso,DockerToolBox版本信息：
+       	DockerToolbox-17.10.0-ce 								         
+       b): 将下载的boot2docker.iso放到以下路径：
+       	C:\Users\Administrator\.docker\machine\cache，重启启动即可。
+       备注：已经下载的相关文件路径存放目录：
        	本地：D:\install\docker\docker_v17_10_0
        	百度网盘：个人百度网盘docker目录
        ```
@@ -137,7 +138,7 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 	docker-machine create --engine-registry-mirror=https://fn43kvml.mirror.aliyuncs.com -d virtualbox virtualName
 ```
 
-## 镜像加速器
+## 镜像加速器获取
 
 ### 阿里云
 
@@ -158,6 +159,73 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 2. [网易]:http://hub-mirror.c.163.com
 
 3. [ustc]: https://docker.mirrors.ustc.edu.cn
+
+## 阿里云搭建私有仓库
+
+1. 创建镜像仓库的命名空间
+
+   ```markdown
+   网址：https://cr.console.aliyun.com/?spm=5176.1971733.0.2.duOGn4#/namespace/index
+   ```
+
+   ![2017-12-24_阿里云_创建命名空间](E:\git_save_study\study_info_summary\docker\screen\2017-12-24_阿里云_创建命名空间.png)
+
+2. 创建镜像和修改registry登陆密码
+
+   ```markdown
+   网址：https://cr.console.aliyun.com/?spm=5176.1971733.0.2.duOGn4#/imageList
+   ```
+
+   ![2017-12-24_阿里云_创建镜像仓库](E:\git_save_study\study_info_summary\docker\screen\2017-12-24_阿里云_创建镜像仓库.png)
+
+3. 上传私有镜像到阿里云
+
+   * 构建私有镜像(以ubuntu为基础镜像)
+
+     ```markdown
+     格式：
+     	sudo docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/fyx/image-test:[镜像版本号]
+     ```
+
+     ![2017-12-24_image_tag](E:\git_save_study\study_info_summary\docker\screen\2017-12-24_image_tag.png)
+
+   * 登陆阿里云registry账号
+
+     ```markdown
+     a) 账号（阿里云账号），密码（registry密码）
+     b) 登陆成功信息：
+     docker@default:~$ docker login -u=1255729193@qq.com registry.cn-hangzhou.aliyuncs.com
+     Password: 
+     Login Succeeded
+     ```
+
+   * 上传镜像验证
+
+     ```markdown
+     命令：
+     	docker push registry.cn-hangzhou.aliyuncs.com/fyx/image-test:v1
+     ```
+
+     **阿里云确认上传成功**
+
+     ```markdown
+     镜像列表 -》管理 -》镜像版本
+     ```
+
+     ![2017-12-24_镜像版本信息](E:\git_save_study\study_info_summary\docker\screen\2017-12-24_镜像版本信息.png)
+
+4. 私有镜像拉取
+
+   ```markdown
+   a): 未登陆进行拉取，提示错误。
+   docker@fyx:~$ docker pull registry.cn-hangzhou.aliyuncs.com/fyx/image-test:v1
+   Error response from daemon: pull access denied for registry.cn-		hangzhou.aliyuncs.com/fyx/image-test, repository does not exist or may require 'docker login'
+   docker@fyx:~$ 
+   b): 先登录在拉取(registry password: 330781fang)
+   docker@default:~$ docker login -u=1255729193@qq.com registry.cn-hangzhou.aliyuncs.com
+   Password: 
+   Login Succeeded
+   ```
 
 ## Docker学习笔记
 
@@ -392,7 +460,7 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
    | ---------------------------------------- | ---------------------------------------- | ---------------------------------------- |
    | 创建container                              | docker create                            | docker create fyx/auto_test              |
    | 运行container                              | docker run                               | docker run fyx/auto_test /bin/bash       |
-   |                                          | docker run -itd images /bin/bash         | docker run -itd ubuntu /bin/bash         |
+   | 运行container: 后台+交互式+tty                  | docker run -itd images /bin/bash         | docker run -itd ubuntu /bin/bash         |
    | 运行container后进入其bash控制台: 交互式和tty          | docker run -t -i images /bin/bash        | docker run -t -i ubuntu /bin/bash        |
    | 运行container并让其在后台运行，并端口映射                | docker run -p [port in container]:[port in pysical system] -d [image] command | docker run p 5000:5000 -d training/webapp python app.py |
    | 查看正在运行的所有container信息                     | docker ps                                | docker ps                                |
@@ -458,6 +526,35 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
      docker ps -a | grep Up | awk {'print $1'} | xargs -n 1 docker stop
      ```
 
+   * kill docker进程
+
+     ```markdown
+     docker kill $(docker ps -qa)
+     ```
+
+   * 重新打包镜像
+
+     ```markdown
+     docker -a "author" -m "add information" container imagename
+     ```
+
+   * 删除None镜像
+
+     ```markdown
+     docker rmi $(docker images | awk '/<none>/ {print $3}')
+     ```
+
+   * -q, -f参数
+
+     ```markdown
+     a): 删除虚悬镜像
+     	docker rmi $(docker images -q -f dangling=true)
+     b): 删除指定名称镜像
+     	docker rmi $(docker images -q ubuntu:14.04)
+     c): 删除mongo3.2之前的镜像
+     	docker rmi $(docker images -q -f before=mongo:3.2)
+     ```
+
 2. 安装docker-compose
 
    * 概念：
@@ -519,14 +616,14 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 
      ```markdown
      a): 指定特定的端口
-     	docker run -d --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin mysql:latest
+     	docker run -dit --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=admin mysql:latest
      	确认运行OK： docker ps(有相关的顿口映射信息：0.0.0.0:3306->3306/tcp) 
      	e421a67040c9     mysql:latest       6 minutes        0.0.0.0:3306->3306/tcp   mysql
      b): 随机生成宿主机台的端口：(-P改成大写即可)
-     	docker run -d --name random -P -e MYSQL_ROOT_PASSWORD=admin mysql:latest
+     	docker run -itd --name random -P -e MYSQL_ROOT_PASSWORD=admin mysql:latest
      	92c0823cb0bd     mysql:latest       11 minutes    0.0.0.0:32768->3306/tcp   random
      c): 为了安全考虑，只希望宿主机台可以访问mysql服务。
-     	docker run -d --name security -p 127.0.0.1:3311:3306 -e MYSQL_ROOOT_PASSWORD=admin mysql:latest
+     	docker run -itd --name security -p 127.0.0.1:3311:3306 -e MYSQL_ROOOT_PASSWORD=admin mysql:latest
      	cd8d75c7aba9     mysql:latest       11 minutes   127.0.0.1:3309->3306/tcp  security
      ```
 

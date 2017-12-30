@@ -668,13 +668,45 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 
 [参考网站]: http://blog.csdn.net/magerguo/article/details/72514813
 
+1. 镜像容器与宿主机器共享文件
+
 ```markdown
 a): 格式
 	-v  host_path:container_path
-b): 举例: 宿主机的/test目录挂载到容器的/soft目录
+b): 举例: 
+	1): 宿主机的/test目录挂载到容器的/soft目录,默认读写
 	docker run -it --name fyx -v /test:/soft ubuntu:14.04 /bin/bash
-	
+	2): 以只读的模式挂载
+	docker run -it --name fyx -v /test:/soft:ro ubuntu:14.04 /bin/bash
 ```
 
+2. 数据卷
 
+```markdown
+a): 概念：
+	其他容器启动可以直接挂载数据卷容器中定义的挂载信息。
+b): 举例
+	1. 先创建一个容器
+	docker run -it -v /home/docker/:/usr/docker --name datavol ubuntu:14.04 /bin/bash
+	2. --volumes-from指定从哪个数据卷来挂载数据
+	docker run -it --volumes-from datavol ubuntu:14.04 /bin/bash
+```
+
+### docker inspect命令
+
+1. 查看全部信息
+
+   ```markdown
+   docker inspect $contianerid
+   ```
+
+2. 查看指定信息
+
+   ```markdown
+   a): 查看docker容器在宿主机器上的pid
+    docker inspect --format "{.State.Pid}" $containerID
+    docker inspect -f "{.State.Pid}" $containerID
+   ```
+
+   ​
 

@@ -44,7 +44,7 @@ path=$(cd `dirname $0`; pwd)
      ```markdown
      编辑：/etc/profile文件
      	JAVA_HOME=/usr/java/jdk1.8.0_152
-     	CLASSPATH=%JAVA_HOME/lib/
+     	CLASSPATH=$JAVA_HOME/lib/
      	PATH=$PATH:$JAVA_HOME/bin/
      	export JAVA_HOME CLASSPATH PATH
      ```

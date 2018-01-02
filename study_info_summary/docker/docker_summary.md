@@ -180,31 +180,20 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 
 3. 上传私有镜像到阿里云
 
-   * 构建私有镜像(以ubuntu为基础镜像)
+   * 构建私有镜像(以ubuntu为基础镜像),并上传
 
      ```markdown
-     格式：
+     登陆：(uname: 1255729193@qq.com  pwd: 330781fang)
+     	sudo docker login -u=1255729193@qq.com registry.cn-hangzhou.aliyuncs.com
+     	Password: 
+     	Login Succeeded
+     打标签：	
      	sudo docker tag [ImageId] registry.cn-hangzhou.aliyuncs.com/fyx/image-test:[镜像版本号]
+     上传镜像：
+     	sudo docker push registry.cn-hangzhou.aliyuncs.com/fyx/images-test:v1
      ```
 
      ![2017-12-24_image_tag](E:\git_save_study\study_info_summary\docker\screen\2017-12-24_image_tag.png)
-
-   * 登陆阿里云registry账号
-
-     ```markdown
-     a) 账号（阿里云账号），密码（registry密码）
-     b) 登陆成功信息：
-     docker@default:~$ docker login -u=1255729193@qq.com registry.cn-hangzhou.aliyuncs.com
-     Password: 
-     Login Succeeded
-     ```
-
-   * 上传镜像验证
-
-     ```markdown
-     命令：
-     	docker push registry.cn-hangzhou.aliyuncs.com/fyx/image-test:v1
-     ```
 
      **阿里云确认上传成功**
 
@@ -214,7 +203,7 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 
      ![2017-12-24_镜像版本信息](E:\git_save_study\study_info_summary\docker\screen\2017-12-24_镜像版本信息.png)
 
-4. 私有镜像拉取
+4. 私有镜像拉取(需要先进行登陆)
 
    ```markdown
    a): 未登陆进行拉取，提示错误。
@@ -709,4 +698,24 @@ b): 举例
    ```
 
    ​
+
+
+
+
+
+
+
+
+## 问题汇总
+
+### docker commit失败或者hang住
+
+```markdown
+命令：
+	docker commit $container  iamges:v
+现象：
+	一直处于等待状态中
+原因：
+	容器启用的时候使用-v参数，共享volumes导致。
+```
 

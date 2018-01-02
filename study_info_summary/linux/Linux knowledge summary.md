@@ -30,7 +30,7 @@ path=$(cd `dirname $0`; pwd)
      http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
      ```
 
-   * 切换到root权限下解压jdk
+   * __切换到root权限下解压jdk
 
      ```markdown
      a): 创建一个Java文件
@@ -62,5 +62,70 @@ path=$(cd `dirname $0`; pwd)
      	rpm -Uvh jdk-8u152-linux-x64.rpm
      ```
 
-     ​
 
+
+### ubuntu中vim设置自动补全
+
+1. [参考网址]: http://blog.sina.com.cn/s/blog_15c3d688a0102z61r.html
+
+2. 总的思路
+
+   ```markdown
+   a): 下载文件
+   	百度网盘链接：http://pan.baidu.com/s/1qYdNVf2
+   	本地存储路径：D:/BaiduYunDownload/vim配置文件
+   b): 将上述文件拷贝到ubuntu的home目录中进行修改
+   	1. cp vim .vim -av
+   	2. mv vimback.txt .vimrc
+   c): 安装ctags(不然每次打开vim，都会报警)
+    	cd /usr
+    	sudo apt-get install ctags -y
+   d): 确认.vimrc中存在如下两句
+   	set tags=/usr/tags;
+   	set autochdir
+   ```
+
+
+### Centos中找不到ifconfig的解决方法
+
+1. ifconfig介绍
+
+   ```markdown
+   ifconfig命令是设置或显示网络接口的程序，可以显示机器的网卡信息
+   ```
+
+2. ifconfig出错信息
+
+   ```markdown
+   [root@42473063080b fyx]# ifconfig
+   bash: ifconfig: command not found
+   [root@42473063080b fyx]# 
+   ```
+
+3. 排除步骤
+
+   ```markdown
+   a): 首先确认环境变量信息，我们知道ifconfig是在/sbin中的。
+   [root@42473063080b fyx]# echo $PATH
+   /root/anaconda2/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+   b): 查看sbin
+   	ls /sbin | grep ifconfig
+   ```
+
+4. ifconfig安装
+
+   ```markdown
+   a): 确认ifconfig所属的安装包
+   	[root@42473063080b fyx]# yum search ifconfig
+   	Loaded plugins: fastestmirror, ovl
+   	Loading mirror speeds from cached hostfile
+    	* base: mirrors.shuosc.org
+    	* extras: mirrors.cn99.com
+   	 * updates: mirrors.aliyun.com
+   	============================== Matched: ifconfig ===============================
+   	net-tools.x86_64 : Basic networking tools
+   b): yum安装
+   	yum install net-tools.x86_64 -y
+   ```
+
+   ​

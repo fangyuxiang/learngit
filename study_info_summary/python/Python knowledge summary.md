@@ -1,3 +1,5 @@
+
+
 # Python knowledge summary
 
 ## 日常知识汇总
@@ -227,3 +229,224 @@
    * 元祖变量只包含原子类型对象，不能进行深拷贝。
 
      ![2017-12-10_元素只包含原子类不能进行深拷贝](E:\git_save_study\study_info_summary\python\screen\2017-12-10_元素只包含原子类不能进行深拷贝.png)
+
+### Anaconda介绍
+
+1. 概念和优点
+
+   [网址]: http://python.jobbole.com/86236/	"参考网站链接"
+
+   * 当前python使用现状
+
+     ```markdown
+     当前python使用过程中比较头疼的就是包管理和不同python版本切换的问题。针对这些问题，python会有不少发行版的python，比如WinPython，Anaconda等（将python和常用的package包打包，方便使用者）。还有virtualenv,pyenv等工具管理虚拟环境
+     ```
+
+
+   * Anaconda介绍
+
+     ```markdown
+     Anaconda是一个用于科学计算的Python发行版，支持Linux,Mac，Windows系统，提供包管理和环境管理的功能。可以方便地解决多版本python共存，切换以及各种第三方包安装问题。Anaconda利用工具/命令conda来进行package和environment管理，同时也包含了Python相关的配套工具。
+     ```
+
+   * conda工具说明
+
+     ```markdown
+     conda可以理解为一个工具，也是一个可以执行命令，其核心功能就是包管理（与pip使用类似）和环境管理（安装不同版本python并可以快速切换）。
+     conda设计理念：conda将几乎所有的工具，第三方包都当做package对待，甚至包括python和conda自身。
+     ```
+
+2. liunx和windows下安装
+
+   * [website]: https://www.anaconda.com/download/	"download_website"
+
+
+   * windows下安装
+
+     * 选择windows对应版本下载
+
+       ```markdown
+       name:
+       	Anaconda2-5.0.1-Windows-x86_64.exe
+       存放路径：
+       	D:/install/anaconda
+       ```
+
+     * 安装
+
+       ```markdown
+       按照提示命令一直next就行，注意在安装的过程中勾选添加环境变量的操作。
+       ```
+
+     * 手动添加环境变量介绍
+
+       ```markdown
+       将C:\Users\Think\Anaconda2\Scripts添加到环境变量中。
+       备注：
+       	用户Think和Anaconda2版本根据实际情况而定。
+       ```
+
+     * 验证安装成功
+
+       ```markdown
+       cmd:
+       	conda --version 命令执行成功
+       ```
+
+   * linux下安装
+
+     * 选择linux对应版本下载
+
+       ```markdown
+       name:
+       	Anaconda2-5.0.1-Linux-x86_64.sh
+       存放路径：
+       	D:/install/anaconda
+       ```
+
+     * 安装
+
+       ```markdown
+       a): 安装过程中错误信息： bunzip2: command not found。
+       	yum install -y bzip2
+       b): 按照提示信息进行回车或yes操作。
+       ```
+
+     * 手动添加环境变量介绍
+
+       ```markdown
+       # 将anaconda的bin目录加入PATH，根据版本不同，也可能是~/anaconda3/bin
+       echo 'export PATH="~/anaconda2/bin:$PATH"' >> ~/.bashrc
+       # 更新bashrc以立即生效
+       source ~/.bashrc
+       ```
+
+     * 验证安装OK
+
+       ```markdown
+       a): which conda或者 conda --version
+       b): 如果安装的是Python 2.7对应的版本,运行python --version
+       	[root@e3654295db52 ~]# python --version
+       	Python 2.7.14 :: Anaconda custom (64-bit)
+       ```
+
+   * 设置国内源
+
+     ```markdown
+     a): 添加Anaconda的TUMA镜像
+     	conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+     b): 设置搜索时显示通道地址
+     	conda config --set show_channel_urls yes
+     备注：
+     	执行完上述命令后，会生成~/.condarc文件。
+     ```
+
+3. 常用命令操作
+
+   * Conda的环境管理(同时安装若干不同版本的python)
+
+     ```markdown
+     # 创建一个名为python34的环境，指定python版本是3.4（不用管3.4.x，conda会为我们自动寻找3.4.x中最新版本）
+     	conda create --name python34 python=3.4
+     # 激活环境
+     	activate python34 # for windows
+     	source activate python34 # for Linux & Mac
+     # 此时再次输入
+     python --version
+     # 可以得到`Python 3.4.5 :: Anaconda 4.1.1 (64-bit)`，即系统已经切换到了3.4的环境
+
+     # 退出虚拟环境
+     	deactivate python34 # for windows
+     	source deactivate python34 #for Linux & Mac
+     # 删除一个已有的环境
+     	conda remove --name python34 --all
+     ```
+
+     **备注**
+
+     ```markdown
+     a): 不同版本的python环境存放目录
+     	~/anaconda/envs
+     b): 查看当前那些环境被激活: conda info -e
+     	 C:\Users\Think\Anaconda2\envs> conda info -e
+     	python35                 C:\Users\Think\Anaconda2\envs\python35
+     	root                  *  C:\Users\Think\Anaconda2
+     ```
+
+   * Conda的包管理
+
+     ```markdown
+     # 查看当前环境下已安装的包
+     	conda list
+     # 查看指定环境下已安装的包
+     	conda list -n python34
+     # 当前环境下安装包
+     	conda install numpy
+     # 指定环境下安装包
+     	conda install -n python34 numpy
+     # 更新package
+     	conda update -n python34 numpy
+     # 删除package
+     	conda remove -n python34 numpy
+     ```
+
+     **conda将conda，python等都视为package，故可以通过conda来操作**
+
+     ```markdown
+     # 更新conda，保持conda最新
+     	conda update conda
+     # 更新anaconda
+     	conda update anaconda
+     # 更新python
+     	conda update python
+     ```
+
+     **创建新环境时包含anaconda包**
+
+     ```markdown
+     # 当前环境下安装anaconda包集合
+     	conda install anaconda
+     # 在创建环境时就安装
+     	conda create -n python34 python=3.4 anaconda
+     ```
+
+### pip更换国内源
+
+1. 常用的国内源。
+
+   ```markdown
+   豆瓣：
+   	http://pypi.douban.com/simple/
+   清华：（推荐）
+   	https://pypi.tuna.tsinghua.edu.cn/simple
+   ```
+
+2. 临时使用。
+
+   ```markdown
+   安装时添加指定源地址
+   命令：
+   	pip install -i http://pypi.douban.com/simple/ gevent
+   ```
+
+3. 永久修改，一劳永逸。
+
+   * windows
+
+     在用户个人目录下：C:\Users\Think\pip下的pip.ini，修改源地址
+
+     ```markdown
+     [global]
+     index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+     ```
+
+   * linux
+
+     修改 ~/.pip/pip.conf (没有就创建一个)， 修改 index-url至tuna，内容如下：
+
+     ```markdown
+     [global]
+     index-url = https://pypi.tuna.tsinghua.edu.cn/simple
+     ```
+
+     ​

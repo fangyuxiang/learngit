@@ -432,7 +432,7 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
    一个轻量级 linux 虚拟机，主要是为了让非 linux 系统也能用上 docker 。它实质上是一个 virtualbox 虚拟主机+一个能管理这个虚拟主机的命令行工具
    ```
 
-### image container基础操作
+### image&container基础操作
 
 1. 通用：
 
@@ -480,6 +480,22 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 | 把本地的image上传到registry中（此时会上传所有的tag）   | docker push [imageName]                  | docker push fyx/hello:v3         |
 | 删除本地image                            | docker rmi [imageName]                   | docker rmi fyx/hello:v3          |
 
+**search结果说明**
+
+```markdown
+a): 查询结果
+docker@default:~$ docker search ubuntu
+NAME     		DESCRIPTION								STARS   OFFICIAL     AUTOMATED
+ubuntu   Ubuntu is a Debian-based Linux operating sys…   	7133   [OK]                
+dorowu/ubuntu-desktop-lxde-vnc  Ubuntu with openssh-server and NoVNC   158         	[OK]
+b): 结果说明
+	OFFICIAL: 官方项目组创建和维护。
+	AUTOMATED: 允许用户验证镜像的来源和内容。
+c): search时添加分离参数
+	例如：仅显示收藏数量为1000以上的ubuntu镜像。
+	docker search ubuntu --filter=stars=1000
+```
+
 ### 容器间共享文件
 
 ```markdown
@@ -501,6 +517,7 @@ c): 退出虚拟机，到windows提示符界面，重启虚拟机
 
      ```markdown
      docker ps -a | grep Exited | awk '{print $1}' | xargs -n 1 docker rm
+     docker container prune
      ```
 
    * 批量开启已关闭的容器

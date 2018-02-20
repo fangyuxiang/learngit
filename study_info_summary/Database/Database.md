@@ -154,7 +154,7 @@
 ###5.一个表的数据批量导入另一张表中
 
 ```mysql
-1. 不管目标table是否存在
+1. 目标table不存在，则先创建后导入数据。
 	mysql> create table target_table select * from soucre_table;
 2.目标table存在，且字段与原table相同
 	a): create table target_table like source_table;
@@ -201,8 +201,238 @@
    a):将多个数据库备份到一个文件
    	mysqldump -hlocalhost -ufyx -p330781 database_1, database_2 > e:/yibaidb_multi_db.sql
    b):将所有的数据库备份到一个文件中。
-   	mysqldump -hlocalhost -ufyx -p330781 --all-database > e:/yibaidb_all_dbs_dump.sql
+   	mysqldump -hlocalhost -ufyx -p330781 --all-databases > e:/yibaidb_all_dbs_dump.sql
    ```
 
-   ​
+### 8. select
 
+1. 批量查询数据
+
+   ```mysql
+   select * from article where id in(1,3,5)
+   ```
+
+2. 使用concat连接查询的结果
+
+   ```mysql
+   select concat(firstName,".",lastName) as fullName from employees where employeesNumber =1;
+   ```
+
+3. 使用group by
+
+   ```mysql
+   作用：把相同的结果编为一组
+   例如：从customer表中列出不重复的城市，及其数量
+   select city, count(*) from customer group by city
+   ```
+
+4. 使用having
+
+   ```mysql
+   having允许有条件的聚合数据为组，缺点：group by+having速度有点慢
+   select city, count(*) from customer group by city having count(*)>10
+   ```
+
+5. distinct去重复
+
+   ```mysql
+   select distinct city from customer order by id desc
+   ```
+
+6. 多表查询
+
+   ```mysql
+   select product from orders as os, orderdetails as ot where os.productNumber=ot.productNumber and os.reg_data>=2017-11-11 order by os.id desc
+   ```
+
+### 9. left join和inner join
+
+* left join在select中的应用
+
+  ```mysql
+  描述：
+  	每个客户都有零个或者多个订单，但是每个订单都属于唯一的一个客户。
+  select c.customerNumber, c.customerName, orderNumber 
+  from customers c
+  	left join orders o on c.customerNumber=o.customerNumber
+  where 
+  	orderNumber is null
+  ```
+
+* left join 在delete中的应用
+
+  ```mysql
+  delete customers
+  from customers left join orders on customers.customerNumber=orders.customerNumber
+  where orderNumber is null
+  ```
+
+* inner join在delete中应用
+
+  ```mysql
+  描述：
+  	删除t1表中id=1的行，并使用delete ... inner join语句删除t2表中的ref=1的行。
+  delete t1, t2 from t1 inner join t2 on t1.id=t2.ref where t1.id=1
+  ```
+
+### 10. on duplicate key update
+
+```mysql
+作用：
+	插入新行或者使用新值更新原有行记录。
+For example
+	insert into task(task_id,subject,start_date,end_date,description) values(4,'Test on duplicate key update',now(), now(),'Next Priority')
+	on duplicate key update
+	taks_id=task_id+1,
+	subject="Test ON DUPLICATE KEY UPDATE";
+```
+
+### 11.数据库，数据的删除
+
+* 删除数据库或者数据表
+
+  ```mysql
+  删除数据库：
+  	drop database (if exists) db_name
+  删除数据表：
+  	drop table (if exists) tb_name
+  删除视图表：
+  	drop view table_name
+  ```
+
+* 删除数据
+
+  ```mysql
+  删除指定行数据：
+  	delete from table_1 where id=2;
+  删除所有行数据：
+  	delete from table_1;
+  删除所有行数据：性能会更好
+  	truncate table 
+  ```
+
+### 12.alter table修改表的结构
+
+* 修改列的属性
+
+  ```mysql
+  描述：
+  	设置列的自动递增属性。
+  alter table tasks change column task_id task_id int(11) not null auto_increment
+  ```
+
+* 添加新的列
+
+  ```mysql
+  指定列的后面添加：
+  	alter table tasks add column complete decimal(2,1) not null after description
+  指定列的前添加：
+  	alter table tasks add column complete decimal(2,1) not null before description
+  ```
+
+* 删除指定的列
+
+  ```mysql
+  alter table tasks drop column description
+  ```
+
+* 重命名表名称
+
+  ```mysql
+  通过alter table进行修改：
+  	alter table tasks rename to work_items;
+  通过rename command进行修改：
+  	rename table lastnames to unique_lastnames;
+  ```
+
+### 13.处理重复数据
+
+1. 防止表中出现重复数据
+
+   ```mysql
+   策略：
+   	MySQL数据表中设置指定的字段为：PRIMARY  KEY(主键)和UNIQUE(唯一)索引来保证数据的唯一性。
+   For example:
+   	create table person(
+       	first_name char(20),
+         	last_name char(20),
+         	sex char(10),
+         	primary key(first_name,last_name)
+         	unique(first_name, last_name)
+       );
+   ```
+
+2. insert ingore into与insert into
+
+   ```mysql
+   insert ignore into:
+   	如果数据库中存在数据，则忽略该条数据。如果数据库中不存在数据，那么则添加数据。
+   ```
+
+3. 统计重复数据
+
+   ```mysql
+   select count(*) as repeatitions, first_name from person group by first_name having repeatitions>1; 
+   ```
+
+4. 过滤重复数据
+
+   ```mysql
+   distinct过滤：
+   	select distinct first_name from person;
+   group by读取不重复的数据：
+   	select first_name, last_name from person group by(first_name, last_name);
+   ```
+
+5. 删除重复数据
+
+   ```mysql
+   1:复制相同的表和数据
+   	create table tmp select last_name, first_name from person group by(first_name, last_name);
+   2:删除有的数据表
+   	drop table person;
+   3:重命名tmp表
+   	alter table tmp rename to person
+   	rename tmp to person
+   ```
+
+### 14. 忘记密码时的处理方法
+
+* 停止mysql
+
+  ```mysql
+  net stop mysql
+  ```
+
+* 启用mysqld with --skip-grant-table
+
+  ```mysql
+  描述：
+  	跳过权限表认证
+  mysqld --skip-grant-table
+  ```
+
+* 更新密码
+
+  ```mysql
+  1.新开cmd窗口
+  	mysql -uroot -p (之后一路回车即可)
+  2.更新密码
+  	update mysql.user set authentication_string=password("new_pwd") where user='root'
+  	flush privileges
+  ```
+
+* 任务管理器关闭mysqld进程
+
+  ```mysql
+  查看任务管理器，关闭mysqld进程。或者执行以下命令： taskkill /f /im mysqld.exe
+  ```
+
+* 启动mysql
+
+  ```mysql
+  net start mysql
+  mysql -uroot -pnew_pwd即可登录成功
+  ```
+
+  ​

@@ -245,7 +245,21 @@
    select product from orders as os, orderdetails as ot where os.productNumber=ot.productNumber and os.reg_data>=2017-11-11 order by os.id desc
    ```
 
-### 9. left join和inner join
+### 9. left join和inner join，right join, full join
+
+* 相互间的区别
+
+  ```markdown
+  left join:
+  	以左表为基准，取左表记录，右表匹配向左表（记录不足的地方为null）
+  right join:
+  	以右表为基准，取右表记录，左表匹配向右表(记录不足的地方为null)
+  full join:
+  	显示两个表的所有信息，相当于and操作，记录不足的地方互为null
+  inner join:
+  	只显示两个表相关联的信息。
+  ```
+
 
 * left join在select中的应用
 
@@ -435,4 +449,44 @@ For example
   mysql -uroot -pnew_pwd即可登录成功
   ```
 
-  ​
+
+### 15. count()函数
+
+1. count()函数的三种不同表现形式
+
+   ```markdown
+   count(*):
+   	返回所有的行包含：null和非null行。
+   	对于MyISAM表而言，其执行速度非常快。
+   count(expression):
+   	返回不包含NULL值的行数（有可能是重复的数据）。
+   count(distinct expression):
+   	返回不包含NULL值的唯一行数。
+   ```
+
+### 16. INSTR()
+
+1. INSTR()函数说明
+
+   ```markdown
+   作用：
+   	返回字符串中子字符串中第一次出现的index值。如果不存在，则返回0
+   语法：
+   	INSTR(str, substr) 不区分大小写
+   	INSTR(str, BINARY substr) 区分大小写
+   示例：
+   	select instr('MySQL', 'sql')
+   	select instr('MySQL', binary 'SQL')
+   	select productname from products where instr(productname,'car')>0
+   ```
+
+2. INSRT & LIKE
+
+   ```markdown
+   共同点：
+   	不区分大小写，执行全表扫描，执行速度相同。
+   示例：
+   	select productname from products where productname like '%Car%';
+   ```
+
+   ​

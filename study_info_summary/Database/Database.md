@@ -78,6 +78,42 @@
 | ------ | --------- | ---- | ------ | ------------- |
 | HP pc  | localhost | fyx  | 330781 | 3306(default) |
 
+## Jemter与Mysql
+
+1. 安装mysql的驱动包
+
+   * [mysql_jar]: https://dev.mysql.com/downloads/file/?id=474258
+
+   * 新建测试计划，加载jar包路径
+
+     ![01_测试计划导入jar包](E:\git_save_study\study_info_summary\Database\01_测试计划导入jar包.png)
+
+2. 创建jdbc连接
+
+   * 步骤：
+
+     ```markdown
+     右键[thread] -> [添加] -> [配置元件] -> [JDBC Connection Configuration]
+     ```
+
+   * 具体配置信息
+
+     ![02_配置jdbc连接](E:\git_save_study\study_info_summary\Database\02_配置jdbc连接.png)
+
+3. 创建JDBC的select请求
+
+   * 步骤：
+
+     ```markdown
+     右键【线程组】——【添加】—— [Simpler] --- 【JDBC Request】
+     ```
+
+   * 具体配置信息
+
+     ![03_jdbc多语句提交配置](E:\git_save_study\study_info_summary\Database\03_jdbc多语句提交配置.png)
+
+
+
 ## 日常命令汇总
 
 ### 1.日期相关
@@ -89,6 +125,8 @@
 	select current_date()
 3:获取当前时间和日期
 	select now()
+4:当前时间戳
+	select current_timestamp()
 ```
 
 ###2.查看mysql版本号
@@ -446,7 +484,7 @@ For example
 
   ```mysql
   net start mysql
-  mysql -uroot -pnew_pwd即可登录成功
+  mysql -uroot -pnew_pwd即可登录
   ```
 
 
@@ -487,6 +525,106 @@ For example
    	不区分大小写，执行全表扫描，执行速度相同。
    示例：
    	select productname from products where productname like '%Car%';
+   ```
+
+
+### 17.SUM()
+
+1. 简单介绍
+
+   ```markdown
+   作用：
+   	sum()函数用于计算一组值或表达式的总和： sum(distinct expression)
+   如何工作的？
+   	1.select语句中使用sum函数，如果没有匹配行则返回：NULL。
+   	2.DISTINCT运算符允许计算集合中的不同值。
+   	3.SUM函数忽略计算中的NULL值。
+   ```
+
+2. sum与format
+
+   ```markdown
+   format:用于格式化sum()函数的返回值。
+   格式：
+   	format(sum(),2)  ===>接收两个参数，第一个为sum函数，第二个为格式化小数点。
+   实例：
+   	format(sum(),2)  ===> 10,223.83
+   	format(sum(),3)  ===> 10,223.830
+   ```
+
+3. sum与group by
+
+   ```markdown
+   需求：计算每个订单的总金额
+   sql语句：
+   	select format(sum(quantityordered * priceeach),2) total from orderdetails group by ordernumber order by total desc;
+   limit的使用：
+   	select format(sum(quantityordered * priceeach),2) total from orderdetails group by ordernumber order by total desc limit 10; 
+   ```
+
+4. sum与having
+
+   ```markdown
+   需求：计算每个订单号的总金额，并筛选总金额大于6000的订单。
+   sql语句：
+   	select ordernumber, format(sum(quantityordered * priceeach),2) from orderdetails group by ordernumber having sum(quantityordered * priceeach) > 60000 order by sum(quantityordered * priceeach); 
+   ```
+
+5. sum与null
+
+   ```markdown
+   背景：sum函数如果没有匹配的行，函数返回null，如何实现返回0.
+   解决方法：使用coalesce()函数
+   COALESCE()函数：
+   	coalesce(arg1,arg2):接收两个参数，如果第一个参数为null，则返回第二个参数。
+   示例：
+   	select coalesce(sum(quantityordered * priceeach),0) from orderdetails where productcode = 's1_2212121';
+   ```
+
+6. sum与inner join
+
+   ```markdown
+   需求：计算取消订单金额的总和
+   sql语句：
+   	select format(sum(quantityordered * priceeach),2) loss from orderdetails inner join orders using(ordernumber) where status = 'Cancelled';
+   ```
+
+### 18.MIN()
+
+1. MIN函数介绍
+
+   ```markdown
+   定义：返回一组中最小的值
+   应用场景：查找最小数，选择最便宜的产品，获取最低的信用额度等
+   语法：
+   	MIN(DISTINCT expression);
+   注意点：
+   	1.DISTINCT对于MIN函数不产生作用。它只是为了ISO兼容性。
+   	2.DISTINCT运算符在其他聚合函数(SUM,AVG,COUNT)中生效。
+   ```
+
+2. MIN与子查询
+
+   ```markdown
+   需求：筛选出价格最低的产品信息
+   sql语句：
+   	select productcode, productname, buyprice from products where buyprice=(select min(buyprice) from products);
+   ```
+
+3. MIN与GROUP BY
+
+   ```markdown
+   需求：查询每个产品线的最低价格产品
+   sql语句：
+   	select productline, min(buyprice) low_price from products group by productline order by low_price;
+   ```
+
+4. LEFT JOIN实现min效果
+
+   ```markdown
+   需求：在不使用MIN函数和子查询的情况下实现相同的效果：
+   sql语句：
+   	select a.productline, a.productcode, a.productname, a.buyprice from products a left join products b on a.productline=b.productline and b.buyprice<a.buyprice where b.productcode is null;
    ```
 
    ​

@@ -80,6 +80,8 @@
 
 ## Jemter与Mysql
 
+### mysql的连接
+
 1. 安装mysql的驱动包
 
    * [mysql_jar]: https://dev.mysql.com/downloads/file/?id=474258
@@ -111,6 +113,50 @@
    * 具体配置信息
 
      ![03_jdbc多语句提交配置](E:\git_save_study\study_info_summary\Database\03_jdbc多语句提交配置.png)
+
+
+### 参数之csv data set config
+
+1. 创建.csv或.dat等结尾的文件
+
+2. 新建csv data set config
+
+   ```markdown
+   线程组或者测试计划右键》添加》配置原件》CSV Data Set Config
+   ```
+
+3. csv data set config配置
+
+   ![04_csv_config](E:\git_save_study\study_info_summary\Database\04_csv_config.png)
+
+   ```markdown
+   Filename:
+   	和脚本同路径只需要填写文件名称或者相对路径，如果不在同一目录，则需要填写绝对路径。
+   File encoding:
+   	包含中文的时候建议：utf-8。
+   Variable Names:
+   	变量名称，多个变量名之间默认(\t)分割。
+   Delimiter:
+   	会根据Variable Names的设置自动引用。
+   Allow quoted data:
+   	双引号相关，例：如果参数中需包含，或者”等，该项可以选择True，效果如下：value1","value2
+   Recycle on EOF?:
+   	设置为True，则允许循环取值。
+   Stop thread EOF?:
+   	当Recycle on EOF设置为False，且Stop thread on EOF设置为True:那么读完csv文件的记录后，线程停止。此时线程运行不在依赖线程执行次数。
+   Sharing mode:
+   	All threads:所有线程组，所有线程组循环取值，线程组1取第一行，线程2取第二行。
+   	Current threads group: 当前线程组，各个线程组分别取循环值。
+   	Current thread: 当前线程，该测试内所有的线程都去第一行。
+   ```
+
+4. 请求中引用参数
+
+   ```markdown
+   select * from ${table} limit ${limit}
+   ```
+
+5. 线程组设置循环次数，原则是每次读取一行数据
 
 
 

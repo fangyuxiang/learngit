@@ -714,12 +714,54 @@ b): 举例
     docker inspect -f "{.State.Pid}" $containerID
    ```
 
-   ​
+
+
+### Container内安装应用
+
+1. 安装python
+
+   ```markdown
+   ubuntu image为例：
+   	1. apt-get update 
+   	2. apt-get install python
+   安装批量应用：
+   	docker run -v /users/python/:/home/python ubuntu pip install -r requirements.txt
+   	-v: 使得容器与本地宿主机器共享目录
+   	requirements.txt文件需要放到本地宿主机器目录：/users/python
+   ```
+
+2. 安装lib包
+
+   ```markdown
+   ubuntu image为例：
+   	apt-get install openssl
+   	apt-get install libssl-dev
+   	apt-get install libffi-dev
+   ```
+
+3. ​
 
 
 
 
 
+
+
+
+
+### docker镜像的导入与导出
+
+1. 导出镜像
+
+   ```markdown
+   docker save -o save_path/save_image.tar containerID
+   ```
+
+2. 导入镜像
+
+   ```markdown
+   docker import save_path/save_image.tar new_image_name
+   ```
 
 
 

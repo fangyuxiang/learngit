@@ -114,6 +114,8 @@ path=$(cd `dirname $0`; pwd)
 
 4. ifconfig安装
 
+   1. centos系统
+
    ```markdown
    a): 确认ifconfig所属的安装包
    	[root@42473063080b fyx]# yum search ifconfig
@@ -128,4 +130,27 @@ path=$(cd `dirname $0`; pwd)
    	yum install net-tools.x86_64 -y
    ```
 
+   2. ubuntu系统
+
+   ```markdown
+   # 同步/etc/apt/sources.list /etc/apt/sources.list.d中的元索引，保障获取到最新软件。
+   	apt-get update
+   # ifconfig安装
+   	apt-get install net-tools
+   # ping安装
+   	apt-get install iputils-ping
+   # vim安装
+   	apt-get install vim 
+   ```
+
+
+### awk匹配操作
+
+1. 匹配以f开头和x结尾的内容
+
+   ```markdown
+   ll | awk '{if($2~/^ffafffx$/) print}'
+   ```
+
    ​
+

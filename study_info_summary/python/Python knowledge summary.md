@@ -449,4 +449,108 @@
      index-url = https://pypi.tuna.tsinghua.edu.cn/simple
      ```
 
-     ​
+
+# Selenium
+
+## 实现原理
+
+1. 关键词:client, driver, 浏览器,webdriver协议
+
+   ```markdown
+   client:
+   	一般指我们写的代码：java，python，ruby等
+   driver：
+   	解析client的请求，应用到浏览器中。
+   浏览器：
+   	rmote_server
+   webdriver协议：
+   	client与server沟通的桥梁，其本身就是htpp协议，数据传输使用json。	
+   ```
+
+2. 原理说明
+
+   ```markdown
+   概况：
+   	selenium是一种client-server模式，client即代表我们的脚本，可以通过java,python,ruby等来编写。不同的浏览器对应的driver启动浏览器,使其作为webdriver的remote-server，webdriver(其本质http协议)作为两者沟通的桥梁，起到解析client请求，并在浏览器上执行相应的操作，并把操作结果返回给client。
+   工作原理：
+   	1. 脚本运行后会打开指定的浏览器，webdriver会将目标浏览器绑定到特定的端口，启动后的浏览器则作为webdriver的remote server，接收测试脚本的命令。
+   	2. 客户端即测试脚本通过CommandExector发送HTTP请求给server。
+   	3. webdriver通过浏览器原生组件，转化为web server的命令为浏览器的native的调用来完成操作。
+   ```
+
+## 如何提升用例的稳定性
+
+1. 控件定位
+
+   ```markdown
+   1：元素id能够唯一确认的，就用id来定位。
+   2：xpath定位和css定位。
+   ```
+
+2. 控件的操作
+
+   ```markdown
+   1:尽量使用click代替MouseClick。
+   2:对于下拉框操作，首先要确保目标元素可见，再去点击操作。
+   3:元素操作前可先判断该元素是否：is_enabled。
+   ```
+
+3. 页面加载
+
+   ```markdown
+   1:尽可能的少的使用sleep。
+   2:多使用显示等待(在设置时间内，默认每隔一段时间检测当前页面元素是否存在)
+   ```
+
+4. 环境和配置
+
+   ```markdown
+   1:测试专属profile，尽量让静态资源缓冲。
+   2:尽量测试环境专用环境，避免其他类型的测试同时进行，造成数据的干扰。
+   ```
+
+## 如何提升selenium脚本的执行速度
+
+1. 使用效率更高的语言，比如java>python。
+2. 不要盲目的使用sleep，尽量使用显示等待。
+3. 对于firefox，考虑使用测试专用的profile。因为浏览器每次启动的时候Firefox都会创建一个新的profile，对于这个新的profile，其静态资源都是直接从服务器中下载，而不是从缓存中加载。
+4. chrome浏览器和safari浏览器的执行速度更好。
+5. 考虑使用分布式执行或者使用selenium grid。
+
+## 显式等待和隐式等待
+
+1. 显式等待
+
+   ```markdown
+   定义：
+   	WebDriver等待某个条件成立时继续执行，否则在达到最大时长时抛出超时异常
+   code：
+   	from selenium import webdriver
+   	from selenium.webdriver.common.by import By
+   	from selenium.webdriver.support.ui import WebDriverWait
+   	from selenium.webdriver.support import expected_conditions as EC
+   	
+   	driver = webdriver.Firefox()
+   	driver.get("http://www.baidu.com")
+   	
+   	element = WebDriverWait(driver, 5, 0.5).util(
+   					EC.presence_of_element_located((By.ID,"kw"))
+   	)
+   	element.send_keys('selenium')
+   	driver.quit()
+   ```
+
+2. 隐式等待
+
+   ```markdown
+   定义：
+   	WebDriver提供了implicity_wait()方法来实现隐式等待，默认值为0。
+   用法说明：
+   	implicity_wait(10)默认参数单位为秒。
+   	1. 首先这10秒并不是一个固定的等待时间，他并不影响脚本的执行速度。
+   	2. 它并不是针对页面上的某一个元素进行等待，而是当脚本执行到某个元素定位时，如果元素可以定位，那么脚本就继续执行，否则以轮询的方式不断判断元素是否被定位，超时抛异常。
+   ```
+
+## 分层测试
+
+![分层测试示意图](E:\git_save_study\study_info_summary\python\screen\分层测试示意图.png)

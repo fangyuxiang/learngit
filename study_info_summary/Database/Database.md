@@ -74,9 +74,10 @@
 
 ### 账号信息
 
-| 安装机台信息 | host      | 用户名  | 密码     | 端口号           |
-| ------ | --------- | ---- | ------ | ------------- |
-| HP pc  | localhost | fyx  | 330781 | 3306(default) |
+| 安装机台信息   | host      | 用户名  | 密码     | 端口号           |
+| -------- | --------- | ---- | ------ | ------------- |
+| HP pc    | localhost | fyx  | 330781 | 3306(default) |
+| thinkpad | localhost | root | 330781 | 3306          |
 
 ## Jemter与Mysql
 
@@ -687,27 +688,27 @@ For example
      | 12        | 中学          | 2000          | 200          |
      | 13        | 高中          | 3000          | 300          |
 
-	2. 删除表中重复的数据，保留id最小的数据
+     2. 删除表中重复的数据，保留id最小的数据
 
-    ```markdown
+    ​```markdown
     step1: 创建临时表，保存不重复的school_id
     	create table tmp  as select min(school_id) as id from test group by school_name;
     step2: 删除重复的数据,保留最小id的数据
     	delete from test where school_id not in (select id from tmp);
     step3: 删除临时表
     	drop table tmp
-    ```
-
-	3. 删除表中重复的数据，保留id最大的数据
-
-    ```markdown
+    ​```
+    
+    3. 删除表中重复的数据，保留id最大的数据
+    
+    ​```markdown
     step1: 创建临时表，保存不重复的school_id
     	create table tmp  as select min(school_id) as id from test group by school_name;
     step2: 删除重复的数据,保留最大id的数据
     	delete from test where school_id in (select id from tmp);
     step3: 删除临时表
     	drop table tmp
-    ```
+    ​```
 
 ### 20.DDL,DML,DCL
 

@@ -502,12 +502,12 @@ For example
   net stop mysql
   ```
 
-* 启用mysqld with --skip-grant-table
+* 启用mysqld with --skip-grant-tables
 
   ```mysql
   描述：
   	跳过权限表认证
-  mysqld --skip-grant-table
+  mysqld --skip-grant-tables
   ```
 
 * 更新密码

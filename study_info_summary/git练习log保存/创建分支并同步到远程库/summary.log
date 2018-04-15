@@ -66,15 +66,15 @@ fyx@Joe MINGW64 /e/git_config_test/home (master)
 		git reset HEAD fielname
 	b): 已更新到本地库，但还没有更新到远程库。
 		step one:
-			git reset --hard file_id(从远程库回退到本地库)
+			git reset --hard file_id(从本地库回退到暂存区)
 		step two:
 			git reset HEAD filename
 			
 7. 将本地分支推送到远程库。
 	a): 将当前库push到远程指定库：
-	git push origin target-branch（master/dev:如果远程库上没有此分支，则自动创建。）
+		git push origin target-branch（master/dev:如果远程库上没有此分支，则自动创建。）
 	b): 指定本地库到远程指定库：
-	git push origin local_branch:remote_branch (如果远程库上没有此分支，则自动创建。)
+		git push origin local_branch:remote_branch (如果远程库上没有此分支，则自动创建。)
 
 	c): Fox exsample: 将当前的dev库推送到远程dev分支。 
 	fyx@Joe MINGW64 /e/git_config_test/home (dev)
@@ -88,6 +88,7 @@ fyx@Joe MINGW64 /e/git_config_test/home (master)
 		* [new branch]      dev -> dev
 	d): 删除远程库中的某个分支: push空到指定分支
 		git push origin :branch
+		git push origin --delete <BranchName>
 		
 8. 从远程分支中更新代码到本地分支中。
 	a): 第一次更新失败：没有将本地分支与远程对应的分支进行关联。
@@ -107,6 +108,7 @@ fyx@Joe MINGW64 /e/git_config_test/home (master)
 			$ git branch --set-upstream-to=origin/dev dev
 		method 2:
 			$ git branch --set-upstream-to local_branch origin/branch
+	
 	c): 再次进行更新
 		fyx@Joe MINGW64 /e/git_config_test/home (dev)
 			$ git pull
@@ -119,12 +121,21 @@ fyx@Joe MINGW64 /e/git_config_test/home (master)
 	a): 远程库名称默认
 		git remote add "git@github.com:fangyuxiang/learning.git" (远程库默认名字：origin)
 		git remote add origin "git@github.com:fangyuxiang/learning.git"(等价于上句)
+	
 	b): 自定义远程库名称
 		好处：存在多个远程库，我们使用不同的名称来标识不同的远程库。
 		git remote add mayue "git@gitee.com:studyRestful/learngit.git"
+	
 	c): 查看远程库信息：
 		git remote -v
 		gitee    git@gitee.com:liaoxuefeng/learngit.git (fetch)
 		gitee    git@gitee.com:liaoxuefeng/learngit.git (push)
 		github    git@github.com:michaelliao/learngit.git (fetch)
 		github    git@github.com:michaelliao/learngit.git (push)
+		
+10. 本地分支操作：
+	a): 删除本地分支：
+		git branch -d <BranchName>
+	
+	b): 重命名本地分支：
+		git branch -m devel develop

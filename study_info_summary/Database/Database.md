@@ -70,6 +70,14 @@
      	sc delete mysql
      ```
 
+   * you must reset your password
+
+     ```markdown
+     step 1:
+     	SET PASSWORD = PASSWORD("330781");
+     step 2:
+     	flush privileges;
+     ```
 
 
 ### 账号信息
@@ -711,4 +719,41 @@ For example
     ​```
 
 ### 20.DDL,DML,DCL
+
+1. 概况
+
+   ```markdown
+   DDL:(Data Difinition Language)
+   	定义：数据库定义语言，定义数据库的结构。
+   	命令：CREATE, ALTER, TABLE,TRUNCAT(截断表的内容),COMMENT
+   DML:(Data Manipulation Language)
+   	定义：数据库操作语言，处理数据库中的数据。
+   	命令：INSERT, UPDATE, DELETE
+   DCL:(Data Control Language)
+   	定义：数据库控制语言，授权，控制等。
+   	命令：GRANT(为用户赋予权限), REVOKE(撤回授权权限)
+   TCL:(Transaction Control Language)
+   	定义：事务控制语言
+   	命令：COMMIT,SAVEPOINT,ROLLBACK,SET TRANSACTION（改变事务选项）
+   ```
+
+2. 示例
+
+   ```markdown
+   create table test;
+   alter table test add birthday date;
+   drop table test;
+   ```
+
+   ​
+
+### 21. group by
+
+1. 概念和作用
+
+```markdown
+group by跟MySQL的聚合函数一起使用，
+```
+
+2. 示例
 

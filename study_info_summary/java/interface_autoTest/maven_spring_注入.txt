@@ -1,0 +1,51 @@
+1: Controller、Service、Dao之间的关系和说明
+	a): Controller:	
+		连接器，连接视图和逻辑处理的模块。
+	b): Service:
+		逻辑处理模块。
+	c): Dao:
+		数据访问层。
+	d): 通常用户在浏览器发出请求，经由监听器和拦截器交由Controller处理，Controller调用Service，Service调用Dao，获取数据后响应到客户端。
+		从代码层面来看：Controller调用Service，Service调用Dao，Dao数据持久化。
+		
+2：自动装配：(参考资料：https://www.cnblogs.com/xiaoxi/p/5935009.html)
+	@Autowired(或者@Resource...)
+	private UserDAO userDAO；
+	的作用类似于private UserDAO userDAO=new UserDAOImpl()；
+	
+3：@Service
+	package com.spring.model;
+
+	import org.springframework.beans.factory.annotation.Autowired;
+	import org.springframework.stereotype.Service;
+
+	@Service
+	public class Zoo {
+		
+		@Autowired
+		private Tiger tiger;
+		
+		@Autowired
+		private Monkey monkey;
+		
+		public String toString(){
+			return tiger + "\n" + monkey;
+		}
+	}
+	这样，Zoo.java在Spring容器中存在的形式就是"zoo"，即可以通过ApplicationContext的getBean("zoo")方法来得到Zoo.java。@Service注解，其实做了两件事情：
+	(1)、声明Zoo.java是一个bean，这点很重要，因为Zoo.java是一个bean，其他的类才可以使用@Autowired将Zoo作为一个成员变量自动注入。
+	(2)、Zoo.java在bean中的id是"zoo"，即类名且首字母小写。
+	
+4：Spring容器管理
+	a): 在类上，使用以下注解，实现bean的声明：
+		@Component泛指组件，当组件不好归类的时候，使用这个注解进行标注。
+		@Service 用来标注业务组件。
+		@Controller 用来标注控制层组件（如spring mvc的controller，struct的action）
+		@Repository	用于标注数据访问组件，即DAO组件。
+		
+	b): 在类的成员变量上，使用以下注解，实现属性的自动装配：
+		@Autowired: 按类的类型进行装配。
+		@Resource(推荐)：
+			1): 同时指定name和type，则spring上下文中找到唯一匹配的bean进行装配，找不到则抛异常。
+			2): 如果指定了name，则按照name进行匹配，如果指定了type，则按照type进行匹配。
+			3): 如果既没有指定name，也没有指定type，默认按照byName方式进行装配。

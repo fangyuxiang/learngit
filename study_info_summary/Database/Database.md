@@ -757,3 +757,14 @@ group by跟MySQL的聚合函数一起使用，
 
 2. 示例
 
+
+
+
+### 22. ifNull 
+
+```markdown
+sql = "SELECT ifNull(id,0) FROM tableName WHERE column_name ='"+ coulmn value+ "'";
+```
+
+
+

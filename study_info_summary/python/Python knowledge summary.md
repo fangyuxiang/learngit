@@ -554,3 +554,25 @@
 ## 分层测试
 
 ![分层测试示意图](E:\git_save_study\study_info_summary\python\screen\分层测试示意图.png)
+
+
+
+
+
+
+
+# python
+
+## db操作warning日志
+
+1. db中点击的字段是varchar型，但是脚本中写成了inter型。
+
+   ```markdown
+   日志信息：
+   	Warning: Truncated incorrect DOUBLE value: '170823164629itsszi01010000271990'
+     self.cursor.execute(sql)
+   解决方法：
+   	对于搜索的字段按照db定义要求，加''执行。
+   ```
+
+   ​

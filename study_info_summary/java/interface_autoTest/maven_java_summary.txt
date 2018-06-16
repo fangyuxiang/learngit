@@ -1,0 +1,136 @@
+﻿1：测试前数据准备工作
+	a): 支付账号余额初始化：确认余额充足。
+	b): 司机账号订单状态初始化：确认无服务中的订单和待服务的订单。
+	
+2：测试集合规划
+	a): 验证主流程测试用例即可。开票处于最后一个流程，选中开票即可。
+	b): 覆盖每个第三方：阿里欢行，高德，同城
+	
+3: 本地调试指定测试集合：
+	console执行：mvn clean -P55 test -DtestSuiteXml=jenkins_testsuite.xml
+	
+4: maven运行解决中文乱码问题：
+	a)：pom文件中修改：
+		maven-surefire-plugin依赖插件下添加utf-8
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-surefire-plugin</artifactId>
+			<configuration>
+				<forkMode>once</forkMode>
+				<argLine>-Dfile.encoding=UTF-8</argLine>
+				<suiteXmlFiles>
+					<suiteXmlFile>testngxml/${testSuiteXml}</suiteXmlFile>
+				</suiteXmlFiles>
+			</configuration>
+		</plugin>
+
+	b): idea中修改
+		file -> settings -> run -> VM Options中输入： -DarchetypeCatalog=internal -Dfile.encoding=GBK 或者：-Dfile.encoding=UTF-8
+		
+		
+5: maven-surefire-plugin
+	指定项目测试集合：https://blog.csdn.net/taiyangdao/article/details/52819700
+
+6: 条件断言
+	 Assert.assertTrue(result!=null);
+	 boolean check_result = total_price.matches("[0-9]+\\.[0-9]{1,2}");
+	 
+7：JSONPath的使用汇总
+	1): 基本用法
+		JSONPath.read(result,"target.value")
+		
+	2): 获取数组元素
+		JSONPath.read(result, "$.content[0].totalFee")   //获取content列表中index为0中的totalFee信息。
+	 
+	 
+8：maven下载依赖包失败，解决方法：
+	maven project -> 上方导航栏m图标 -》command line输入下面命令：
+	clean package -U -Dmaven.test.skip=true
+
+	
+9. queryForObject的使用说明
+	a): 基本用法：queryForObject(String sql, Object[] args, RowMapper<T> rowMapper)
+	b): 用法示例：
+		1): 生成简单的bean
+			RowMapper<SystemConfigVo> rowMaper = new BeanPropertyRowMapper<>(SystemConfigVo.class)
+			
+		2): SystemConfig类实现：
+			该类实现设置或者获取数据库的信息。类的属性采用驼峰命名法。（例如DB中的order_status => orderStatus）
+			BeanPropertyRowMapper，这个类可以实现Spring的orm，但是需要注意的是，
+		    这里的orm有一些命名限制，例如最多只支持数据库字段下划线命名与实体类属性驼峰法命名对应，如果字段和属性命名有差别是映射不到的。
+		
+		3): 具体的调用
+			String sql = "SELECT * FROM hermes_order limit 1";
+			SystemConfigVo systemConfig = queryForObject(sql,rowMapper)
+			Integer status = systemConfig.getStatus()   ===> getStatus()需要在SystemConfigVo中实现。
+			
+10. dubbo服务注册于同一个服务器上，application的使用说明：
+	a): 背景：hermes-order和hermes-upms这两个dubbo服务都注册与同一个服务器。
+	
+	b): 在测试hermes-order的dubbo服务时，hermes_order_dubbo.xml文件中声明：<dubbo:application name="hermesOrderServiceTest"/>
+		在测试hermes-upms的dubbo服务时，hermes-upms-dubbo.xml文件中声明：<dubbo:application name="hermesUpmsServiceTest">
+
+	c): 这时启用测试，spring会报duplication application name的错误。
+	
+	d): 解决方法：
+		1): 声明一个通过的application: dubbo-common.xml
+			<?xml version="1.0" encoding="UTF-8"?>
+			<beans xmlns="http://www.springframework.org/schema/beans"
+				xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+				xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+				<dubbo:application name="caocaotest" owner="caocaotest"/>
+			</beans>
+		
+		2): 在其他xml文件中引用上述即可
+			<import resource="dubbo-common.xml"/>
+
+11. classpath和classpath*的区别：
+	a): classpath和classpath*都可以加载整个classpath下(包含jar里面)的资源文件。
+	b): classpath只会返回第一个匹配的资源，查找路径是优先在项目中存在资源文件，再查找jar包。
+	c): 文件名称包含通配符资源(如: spring-*.xml,spring*.xml),如果根目录为""，classpath加载不到任何资源。
+		而classpath*则可以加载到classpath中可以匹配的目录中资源，但是不能加载到jar包中的资源。
+		
+	举例说明：(https://blog.csdn.net/zl3450341/article/details/9306983)
+		src/main/resources
+			META-INF
+				aaa
+					notice.txt
+				notice.txt
+			notice.txt
+			
+	classpath:notice*.txt		===》加载不到任何资源。（对应上面规则C）
+	classpath*:notcie*.txt		===》加载到resource根目录下的notice.txt (对应上面规则C)
+	
+	classpath:META-INF/notcie*.txt  ===》加载到META0-INF下的一个资源。（对应规则b).
+	classpath*:META-INF/notcie*txt  ===》加载到classpath以及所有jar包中META-INF目录下的以notcie开头的文件。
+	
+	classpath*:META-*/notcie*.txt   ===》只能加载到classpath下META-INF目录下的notice.txt
+	classpath:META-*/notcie*.txt	===》加载不到任何资源（对应规则C）
+
+12. java中获取文件的相对路径：
+	a): 目录结构示例
+		DesicionTress
+			|___src
+				|___com.decisiontree.SamplesReader.java
+			|___resource
+				|___train.txt,test.txt
+				
+	b): 获取train.txt表示：
+		filePath=resource/train.txt
+		
+	c): 特别说明：
+		1): java.io默认定位到当前用户目录("user.dir")下,即:工程根目录，D:\DesicionTress
+		2): 相对路径的起始处无斜杆“/”。
+
+后续优化点：
+	1): 费用结算后，检查db状态  ===》已ok。
+	2): db操作的适配到主框架中。===》已ok
+	3): 预约单30元最低消费： amap的queryBillDetail完成，其余待确认(ali和百度)
+	
+order_tags: 
+	4: 现金支付
+	4: 现金支付
+	
+	1： 尊享
+	
+	5： 即使现金又是尊享

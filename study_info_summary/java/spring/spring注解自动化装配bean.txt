@@ -1,0 +1,17 @@
+1： 注解自动化装配bean
+	关键词： 
+		扫描、自动装配
+	
+	
+2： 扫描的两种方式：
+	a): 手动配置扫描
+		1): 扫描当前类中包以及子包中的@Componet注解
+			@Configuration
+			@ConponentScan
+		2)：扫描指定的packages
+			@Configuration
+			@ConponentScan(basePackageClasses={classname.class}) 
+	b): xml文件配置
+	
+	
+3：bean装配验证

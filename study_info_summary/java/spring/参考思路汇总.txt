@@ -1,0 +1,131 @@
+1: springboot实现发送邮件。
+	a): pom表依赖
+		<dependency>
+		   <groupId>org.springframework.boot</groupId>
+		   <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+		
+	b): 添加邮件配置（application.properties）
+		spring.mail.protocal=smtp
+		spring.mail.host=smtp.163.com
+		spring.mail.port=25
+		spring.mail.smtpAuth=true
+		spring.mail.smtpStarttlsEnable=true
+		spring.mail.smtpSslTrust=smtp.163.com
+		spring.mail.username=***@163.com
+		spring.mail.password=********
+		
+	c): 创建实体类
+		package com.example.demo.dao.model
+		
+		public class Mail {
+			/*
+			 * 发送给多人
+			 */
+			private String[] to;
+			
+			/*
+			 * 抄送
+			 **/
+			private String[] cc;
+		
+			public void setTo(String[] to) {
+				this.to = to;
+			}
+			
+			public String getTo(String[] to) {
+				return to;
+			}
+			
+			public void setCc(String[] cc) {
+				this.cc = cc;
+			}
+			
+			public String getCc() {
+				return cc;
+			}
+			
+		}
+		
+	d): 创建邮件常量类：
+		package com.example.demo.constant;
+		
+		public class MailConstant {
+			/**
+			 * 注册的模板名称
+			 */
+			public static final String RETGISTEREMPLATE = "register";
+		}
+		
+	e): 创建邮件业务类：
+		1): MailService
+			public interface MailService {
+				/**
+				 * 发送简单邮件
+				 * @param mail
+				 */
+				void sendSimpleMail(Mail mail);
+				
+				/**
+				 * 发送带附件的邮件
+				 * @param mail
+				 * @param request
+				 */
+				void sendAttachsMail(Mail mail, HttpServletRequest request);
+			}
+			
+		2): MailServiceImpl
+			@Service
+			public class MailServiceImpl implements MailService {
+				
+				private static final Logger logger = LoggerFactory.getLogger(MailServiceImpl.class);
+				
+			
+				/**
+				 * 发送附件
+				 *
+				 * @throws Exception
+				 */
+				@Override
+				public void sendAttachmentsMail(Mail mail,HttpServletRequest request){
+					try{
+						MimeMessage mimeMessage = mailSender.createMimeMessage();
+						MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+						helper.setFrom(from);
+						helper.setTo(mail.getTo());
+						helper.setSubject(mail.getSubject());
+						helper.setText(mail.getText());
+						List<String> list = UploadActionUtil.uploadFile(request);
+						for (int i = 1,length = list.size();i<=length;i++) {
+							String fileName = list.get(i-1);
+							String fileTyps = fileName.substring(fileName.lastIndexOf("."));
+							FileSystemResource file = new FileSystemResource(new File(fileName));
+							helper.addAttachment("附件-"+i+fileTyps, file);
+						}
+						mailSender.send(mimeMessage);
+					}catch (Exception e){
+						e.printStackTrace();
+					}
+				}
+			}
+			
+	f): 创建MailController
+		@RestController
+		@RequestMapping("/mail")
+		public class MailController{
+			@PostMapping("/sendTemplateMail")
+			public RetResult<String> sendTemplateMail(Mail mail) throws Exception {
+				String identifyingCode = ApplicationUtils.getNumStringRandom(6);
+				mail.setSubject("欢迎注册初晨");
+				mail.setTemplateName(MailConstant.RETGISTEREMPLATE);
+				Map<String,String> map = new HashMap<>();
+				map.put("identifyingCode",identifyingCode);
+				map.put("to",mail.getTo()[0]);
+				mail.setTemplateModel(map);
+				mailService.sendTemplateMail(mail);
+
+				return RetResponse.makeOKRsp(identifyingCode);
+			}
+
+
+		}

@@ -1,0 +1,128 @@
+1: OsPayInfoMapper.xml（location: hermes-order-service.src.main.resources.sqlMap)
+	a): OsPayInfoMapper.xml中实现了接口中文件中定义的method: insert、update、delete、select
+
+
+	b): mapper: 指定映射的接口文件：
+		格式：
+			<mapper  namespace="com.caocao.hermes.order.dao.OsPayInfoMapper">
+
+		作用：
+			OsPayInfoMapper接口文件定义了：各个method
+
+	c): OsPayInfo: db数据库字段与model模型映射：
+		<resultMap id="baseResultMap", type="com.caocao.hermes.order.dao.model.OsPayInfo">
+
+		作用：
+			OsPayInfo class文件实现db字段的获取和设置。（setter & getter）
+
+	d): OsPayInfoService、OsPayInfoServiceImpl、OsPayInfoMapper三者间的关系：
+		<1>: OsPayInfoServiceImpl是OsPayInfoService的方法的具体实现。
+
+		<2>: OsPayInfoServiceImpl中方法的实现需要通过OsPayInfoMapper去操作具体的sql。
+		
+2： lombok的作用是什么：
+	a): 官网：http://jnb.ociweb.com/jnb/jnbJan2010.html
+	b): 总结： （https://blog.csdn.net/mccand1234/article/details/53456411）
+			在源码中不需要写一些通用的方法，但在编译生成的字节码文件中帮我们生成这些方法。
+	c): 简单介绍：
+		@Getter：  
+		@Setter：
+		@ToString： 
+		@Data： 
+			1): 为所有字段添加@ToString, @EqualsAndHasCode, @Getter方法。
+			2): 为非final字段添加@Setter
+			3): 为final字段添加@RequireArgsConstructor
+		@NonNull: 避免空指针
+		@CleanUp: 自动调用close()方法。一般用于处理输入与输出流。
+		@NoArgsConstructor: 自动生成无参数构造函数。
+		@AllArgsConstructor: 自动生成全参数构造函数。
+		
+		
+3:  Controller中知识点。
+	a): 类标记
+		@RestController
+		@ResquestMapping("test")
+		public class UserInfoController {
+			@PostMapping("/hello")
+			public String hello() {
+				return "hello world";
+			}
+			
+			@GetMapping("/getUsers")
+			public UserIno getUsers() {
+				return userDao;
+			}
+		}
+	b)：页面渲染和直接返回信息
+		1): 页面渲染:
+			方法一： @Controller
+			方法二： @RestContoller + ModelAndView
+		
+		2): 返回字符串
+			方法一： @Controller + @ResponseBody
+			方法二： @RestController
+		
+		备注：@RestController是由@Controller和@ResponseBody组成，表示该类是controller和返回返回的结果为JSON数据，不是页面路径。
+		所以如果是需要渲染页面的话，应该使用@Controller
+	
+	b): 接收的参数修饰符
+		@PathVariable:  表示参数从路径中得来的
+		@RequestBody:   表示参数从Http Request的body中解析。
+		@RequestHeader: 表示参数是Http Request的header中定义的。
+		
+4：model、service、dao定义和关联关系。（https://zhuanlan.zhihu.com/p/26314850）
+	model：定义数据模型。（常常和持久化的数据--对应）
+	dao： db操作。（负责数据库的增删改查）
+	service： 业务逻辑，调用dao
+	controller: 控制台，url
+	
+5：hermes-order公务中的dao、dto关系浅析。
+	a): 内部需要实现sql操作，使用dao。
+		1): 目录结构。
+			dao
+				-model
+				sqlMapper
+			service
+				-impl
+				serviceInterface
+		2): 结构说明。（OsExt进行示例）
+			OsExt类文件：（class）
+				定义了字段、get、set方法。
+				
+			OsExtMapper接口文件：（interface）
+				定义了sql方法，与OsExtMapper.xml配置文件对应。
+				
+			OsExtService接口文件：（interface)
+				定义了业务逻辑需要实现的方法。
+				
+			OsExtServiceImpl类文件：(classe)
+				是对OsExtService接口文件的具体实现，内部调用OsExtMapper。
+				（接口引用，通过@Resource注入，但是接口的说明上面无须加@Conponet）
+				
+			OsExtMapper.xml：
+				mybatis配置文件，实现对os_ext库的sql操作。
+				
+	
+	b): 调用外部api，使用dto。
+		1):dto等同于上面的model，定义了实体数据类。
+			实现方式1：自己声明变量和get、set方法。
+			实现方式2： 利用lombok的@Data注解，实现get、set方法。
+			
+		2): dto实例调用
+			UserInfoPO userInfoPO = new UserInfoPO();
+		
+6： springMVC中的相关注解说明：（https://blog.csdn.net/wojiaowo11111/article/details/51605213）
+	a): 总结：
+		@Controller 控制器(注入服务)
+		@Service 服务（注入dao)
+		@Repository dao (实现dao访问)
+		@Conponent (把普通pojo实例化到spring容器中，相当于配置文件中的<bean id="" class=""/>)
+	
+	b): @Resource和@Autowired使用场景:
+		1): @Resource：
+			@Component实例化的 
+			
+			接口类
+		2): @Autowired使用场景
+			@Service注解声明的ipml实现类或者class类
+	

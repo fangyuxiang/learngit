@@ -1,0 +1,4 @@
+1: SpringBootDemo：(使用Spring-boot 集成了Mybatis，Redis，Swagger，Jenkins，SonarQube，搭建了一个一个完整的微服务框架。 )
+	a): git address: https://github.com/jaycekon/SpringBootDemo
+	b): website: http://www.cnblogs.com/jaycekon/p/SpringBoot.html
+	

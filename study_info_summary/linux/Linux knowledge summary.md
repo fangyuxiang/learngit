@@ -152,5 +152,35 @@ path=$(cd `dirname $0`; pwd)
    ll | awk '{if($2~/^ffafffx$/) print}'
    ```
 
-   ​
+
+
+### less
+
+```markdown
+G:直接跳转到最后
+ctrl + f: 往前跳转一页
+ctrl + b: 往后退一页
+ctrl + j: 往前进一行
+ctrl + k: 往后退一行
+```
+
+### grep
+
+```markdown
+忽略文件中的#号注释行：
+	grep -v "^#" file
+```
+
+### vim
+
+```markdown
+显示行号：
+	:set number
+取消显示行号:
+	:set nonumber
+锁进：
+	:set autoindent
+取消缩进：
+	:set noautoindent
+```
 

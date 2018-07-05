@@ -1,0 +1,22 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot.dal.mapper.UserMapper">
+    <resultMap id="UserResultMap" type="com.example.springboot.dal.model.User">
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+    </resultMap>
+
+    <sql id="columns">
+        username, id_card, phone, password
+    </sql>
+
+    <select id="selectByIdCard"  resultMap="UserResultMap">
+        select id,
+        <include refid="columns"/>
+        FROM user
+        WHERE id_card = #{idCard, jdbcType=VARCHAR}
+    </select>
+</mapper>

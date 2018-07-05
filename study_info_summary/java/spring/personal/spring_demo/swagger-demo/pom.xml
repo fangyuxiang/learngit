@@ -10,6 +10,9 @@
 
 	<modules>
 		<module>springboot-web</module>
+        <module>springboot-dal</module>
+		<module>springboot-test</module>
+		<module>springboot-common</module>
 	</modules>
 
 	<name>swagger-demo</name>

@@ -19,4 +19,5 @@
         FROM user
         WHERE id_card = #{idCard, jdbcType=VARCHAR}
     </select>
+
 </mapper>

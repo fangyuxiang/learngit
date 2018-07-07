@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <properties resource="application.properties">
+    </properties>
+
+    <!--<typeAliases>
+    <typeAlias alias="_Student" type="com.example.springboot.mybatis.model.Student" />
+    </typeAliases>-->
+    <typeAliases>
+        <package name="com.example.springboot.mybatis.model"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${spring.datasource.driver-class-name}"/>
+                <property name="url" value="${spring.datasource.url}"/>
+                <property name="username" value="${root}"/>
+                <property name="password" value="${330781}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="com/example/springboot/mybatis/dao/*.xml"/>
+    </mappers>
+
+</configuration>

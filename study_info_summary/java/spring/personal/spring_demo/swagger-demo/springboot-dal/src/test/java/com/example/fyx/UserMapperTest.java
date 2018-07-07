@@ -2,6 +2,7 @@ package com.example.fyx;
 
 import com.example.springboot.dal.SpringBootMybatisApplication;
 import com.example.springboot.dal.mapper.UserMapper;
+import com.example.springboot.dal.model.NormalUser;
 import com.example.springboot.dal.model.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,8 +28,21 @@ public class UserMapperTest {
 
     @Test
     public void testSelect() {
-        User user = userMapper.selectByIdCard("111");
-        System.out.println("userInfo:" + user);
+        /*
+         *  NormalUser字段命名与db字段保持一致。
+         * */
+        NormalUser user = userMapper.selectByName("test1");
+        System.out.println(">>>>> mapper映射时保持与db字段名称一致:" + user);
+        Assert.assertNotNull(user);
+    }
+
+    @Test
+    public void testSelectByAlias() {
+        /*
+         *  User中的idCard字段与db中的id_card不一致
+         * */
+        User user = userMapper.selectByAliasName("test1");
+        System.out.println(">>>>>> sql别名映射:" + user);
         Assert.assertNotNull(user);
     }
 }

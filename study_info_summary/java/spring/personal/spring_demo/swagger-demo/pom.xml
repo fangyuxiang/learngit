@@ -13,7 +13,10 @@
         <module>springboot-dal</module>
 		<module>springboot-test</module>
 		<module>springboot-common</module>
-	</modules>
+        <module>springbootmy-batis</module>
+        <module>springboot-mybatis</module>
+        <module>springboot-common</module>
+    </modules>
 
 	<name>swagger-demo</name>
 	<description>Demo project for Spring Boot</description>
@@ -96,6 +99,13 @@
 							</goals>
 						</execution>
 					</executions>
+					<!--<dependencies>-->
+						<!--&lt;!&ndash; spring热部署&ndash;&gt;-->
+						<!--<dependency>-->
+							<!--<groupId>org.springframework</groupId>-->
+							<!--<artifactId>springloaded</artifactId>-->
+						<!--</dependency>-->
+					<!--</dependencies>-->
 				</plugin>
 			</plugins>
 		</pluginManagement>

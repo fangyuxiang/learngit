@@ -1,0 +1,36 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot.mybatis.dao.StudentMapper">
+    <resultMap id="StudentResultMap" type="student">
+        <id property="id" column="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="score" jdbcType="INTEGER" property="score"/>
+    </resultMap>
+
+    <sql id="columns">
+        name, score, age
+    </sql>
+
+    <select id="getInfo" resultMap="StudentResultMap">
+        select id,
+        <include refid="columns"/>
+        FROM student
+        WHERE name = #{name, jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM Student
+        WHERE id=#{id, jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="student" >
+        insert into Student (score, name, age )
+        values (#{score,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+        #{age,jdbcType=INTEGER}
+        )
+    </insert>
+
+
+</mapper>

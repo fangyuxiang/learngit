@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="enumTest.SignalTest" time="0" tests="0" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="sun.desktop" value="windows"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+    <property name="sun.jnu.encoding" value="GBK"/>
+    <property name="java.class.path" value="E:\git_save_study\study_info_summary\java\spring\personal\spring_demo\swagger-demo\springboot-test\target\test-classes;E:\git_save_study\study_info_summary\java\spring\personal\spring_demo\swagger-demo\springboot-test\target\classes;"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="user.variant" value=""/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="user.timezone" value=""/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="user.country" value="CN"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_101\jre\bin"/>
+    <property name="sun.java.command" value="C:\Users\YUXIAN~1.FAN\AppData\Local\Temp\surefire4170387620933076851\surefirebooter5289586923398448610.jar C:\Users\yuxiang.fang\AppData\Local\Temp\surefire4170387620933076851 2018-07-07T19-15-55_985-jvmRun1 surefire1976969576711853833tmp surefire_17503975175896671537tmp"/>
+    <property name="surefire.test.class.path" value="E:\git_save_study\study_info_summary\java\spring\personal\spring_demo\swagger-demo\springboot-test\target\test-classes;E:\git_save_study\study_info_summary\java\spring\personal\spring_demo\swagger-demo\springboot-test\target\classes;"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="C:\Users\yuxiang.fang"/>
+    <property name="user.language" value="zh"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.home" value="C:\Program Files\Java\jdk1.8.0_101\jre"/>
+    <property name="basedir" value="E:\git_save_study\study_info_summary\java\spring\personal\spring_demo\swagger-demo\springboot-test"/>
+    <property name="file.separator" value="\"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="surefire.real.class.path" value="C:\Users\YUXIAN~1.FAN\AppData\Local\Temp\surefire4170387620933076851\surefirebooter5289586923398448610.jar"/>
+    <property name="sun.boot.class.path" value="C:\Program Files\Java\jdk1.8.0_101\jre\lib\resources.jar;C:\Program Files\Java\jdk1.8.0_101\jre\lib\rt.jar;C:\Program Files\Java\jdk1.8.0_101\jre\lib\sunrsasign.jar;C:\Program Files\Java\jdk1.8.0_101\jre\lib\jsse.jar;C:\Program Files\Java\jdk1.8.0_101\jre\lib\jce.jar;C:\Program Files\Java\jdk1.8.0_101\jre\lib\charsets.jar;C:\Program Files\Java\jdk1.8.0_101\jre\lib\jfr.jar;C:\Program Files\Java\jdk1.8.0_101\jre\classes"/>
+    <property name="user.script" value=""/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="1.8.0_101-b13"/>
+    <property name="user.name" value="Yuxiang.Fang"/>
+    <property name="path.separator" value=";"/>
+    <property name="os.version" value="10.0"/>
+    <property name="java.endorsed.dirs" value="C:\Program Files\Java\jdk1.8.0_101\jre\lib\endorsed"/>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="file.encoding" value="GBK"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="localRepository" value="C:\Users\yuxiang.fang\.m2\demoRepository"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="java.io.tmpdir" value="C:\Users\YUXIAN~1.FAN\AppData\Local\Temp\"/>
+    <property name="idea.version" value="2017.3.5"/>
+    <property name="java.version" value="1.8.0_101"/>
+    <property name="user.dir" value="E:\git_save_study\study_info_summary\java\spring\personal\spring_demo\swagger-demo\springboot-test"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.library.path" value="C:\Program Files\Java\jdk1.8.0_101\jre\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Python27\;C:\Python27\Scripts;C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;E:\software_ins\mysql-5.7.20-winx64\bin\;%JAVA_HOME%\bin;C:\Program Files\Git\cmd;%MAVEN_HOME%\bin;%GNU_WINEDOWS_HOME%\bin;E:\software_dir\python_3_6\Scripts\;E:\software_dir\python_3_6\;C:\Users\yuxiang.fang\AppData\Local\Continuum\anaconda3;C:\Users\yuxiang.fang\AppData\Local\Continuum\anaconda3\Library\mingw-w64\bin;C:\Users\yuxiang.fang\AppData\Local\Continuum\anaconda3\Library\usr\bin;C:\Users\yuxiang.fang\AppData\Local\Continuum\anaconda3\Library\bin;C:\Users\yuxiang.fang\AppData\Local\Continuum\anaconda3\Scripts;C:\Users\yuxiang.fang\AppData\Local\Microsoft\WindowsApps;E:\software_ins\Fiddler;E:\software_dir\apache-maven-3.3.9\bin;D:\android_summary\install\android-sdk_r24.4.1-windows\platform-tools;D:\android_summary\install\android-sdk_r24.4.1-windows\tools;E:\software_ins\GetGnuWin32\gnuwin32\bin;E:\software_ins\Docker Toolbox;."/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="java.vm.version" value="25.101-b13"/>
+    <property name="java.ext.dirs" value="C:\Program Files\Java\jdk1.8.0_101\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="maven.repo.local" value="C:\Users\yuxiang.fang\.m2\demoRepository"/>
+    <property name="java.class.version" value="52.0"/>
+  </properties>
+</testsuite>

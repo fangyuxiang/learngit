@@ -12,7 +12,6 @@
     <groupId>com.example</groupId>
     <artifactId>springboot-mybatis</artifactId>
 
-
     <dependencies>
         <dependency>
             <groupId>com.example</groupId>
@@ -20,16 +19,39 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!--此依赖如果没有引入,那么视图就无法渲染,-->
+        <!--spring模板引擎-->
+        <!--website: https://www.imooc.com/qadetail/194867?t=341887 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--测试模块-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--mybatis-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
+        <!--pagehelper分页-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
         </dependency>
 
+        <!--sql连接-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -41,6 +63,7 @@
             <artifactId>mapper</artifactId>
             <version>4.0.3</version>
         </dependency>
+
 
     </dependencies>
 
@@ -55,10 +78,11 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                    <include>**/*.xml</include>
-                </includes>
+                <!--这里注释掉的原因在于：resource目录下新增信息，都需要在维护一遍-->
+                <!--<includes>-->
+                    <!--<include>**/*.properties</include>-->
+                    <!--<include>**/*.xml</include>-->
+                <!--</includes>-->
             </resource>
         </resources>
     </build>

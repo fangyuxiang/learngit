@@ -18,17 +18,26 @@
             <!--<artifactId>springfox-swagger2</artifactId>-->
         <!--</dependency>-->
 
-        <!--<dependency>-->
-            <!--<groupId>io.springfox</groupId>-->
-            <!--<artifactId>springfox-swagger-ui</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>springboot-common</artifactId>
+        </dependency>
 
         <!--此依赖如果没有引入,那么视图就无法渲染,-->
+        <!--spring模板引擎-->
         <!--website: https://www.imooc.com/qadetail/194867?t=341887 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+
+        <!--&lt;!&ndash; 热部署 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-devtools</artifactId>-->
+            <!--<optional>true</optional>-->
+            <!--<scope>true</scope>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>com.spring4all</groupId>

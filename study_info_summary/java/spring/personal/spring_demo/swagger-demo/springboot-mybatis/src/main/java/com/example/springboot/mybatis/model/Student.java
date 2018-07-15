@@ -1,5 +1,6 @@
 package com.example.springboot.mybatis.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,8 +12,9 @@ import org.apache.ibatis.type.Alias;
  * @author: yuxiang.fang
  * @create: 2018-07-06 22:24
  **/
-//@Alias("_Student")
+//@Data: 包含了@Setter、@Getter、@ToString、@EqualsAndHasCode
 @Data
+@Builder
 public class Student {
 
     private  Long id;

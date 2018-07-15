@@ -32,5 +32,14 @@
         )
     </insert>
 
+    <select id="selectByList" resultMap="StudentResultMap">
+        select * from student
+    </select>
 
+
+    <select id="getStudentList" resultMap="StudentResultMap">
+        select
+        <include refid="columns"/>
+        from student
+    </select>
 </mapper>

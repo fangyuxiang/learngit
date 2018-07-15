@@ -1,7 +1,10 @@
 package com.example.springboot.web.controller;
 
+import com.example.springboot.common.exception.DemoMyBatisException;
+import com.example.springboot.web.constants.WebErrorMessage;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,4 +34,9 @@ public class TestRestController {
         return modelAndView;
     }
 
+    @ApiOperation(value = "验证控制器的异常处理类")
+    @GetMapping(value = "/user/{id:\\d+}")
+    public String batisExceptionTest(@PathVariable String id) {
+        throw new DemoMyBatisException(WebErrorMessage.PARAMS_ERROR.getCode(), WebErrorMessage.PARAMS_ERROR.getMsg());
+    }
 }

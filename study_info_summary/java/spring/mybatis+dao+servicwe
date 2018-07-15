@@ -126,3 +126,268 @@
 		2): @Autowired使用场景
 			@Service注解声明的ipml实现类或者class类
 	
+7： mybatis映射器配置规则。（https://blog.csdn.net/u012702547/article/details/54562619）
+	a): 字段命名规则
+		JavaBean中的属性命名：驼峰命名法(userName)。
+		数据库中采用规则：下划线命名法。
+		
+	b): select字段映射问题：
+		1): 使用sql别名功能。(比较麻烦)
+				<select id="getUser" resultType="u" parameterType="Long">
+					select id, user_name as userName, password, address from user where id=#{id}
+				</select>
+				
+		2): 使用mapUderscoreToCamelCase属性。（依赖代码开发规范）
+			>>> step1: mybatis-conf.xml进行配置
+				<settings>
+					<setting name="mapUnderscoreToCamelCase" value="true" />
+				</settins>
+				
+			>>> step2: 开发过程中遵循命名规范即可。
+				<select id="getUser" resultType="u" parameterType="Long">
+					select * from user where id=#{id}
+				</select>
+				
+		3): 使用resultMap（终极解决方法）
+			>>> resultMap配置。
+				<resultMap id="userMap" type="org.sang.bean.User">
+					<id property="id" column="id" javaType="long" jdbcType="NUMERIC">
+					<result property="userName" column="user_name" javaType="string" jdbcType="VARCHAR"/>
+					<result property="password" column="password" javaType="string" jdbcType="VARCHAR"/>
+					<result property="address" column="address" javaType="string" jdbcType="VARCHAR"/>
+				</resultMap>
+				
+				字段说明：
+					property:javaBean中的属性名称
+					javaType: javaBean中的属性类型。
+					column: 数据库中的字段名称
+					jdbcType: 数据库中的字段属性类型。
+					
+			>>> 使用示例说明
+				<select id="getUser" resultMap="userMap" parameterType="Long">
+					select * from user where id=#{id}
+				</select>
+			
+	c): select多条件查询
+		1): 使用@Param注解
+			>>> UserMapper中定义相关接口
+				public List<user> getUserByAddressAndName(@Param("username") String username, @Param("address")
+		
+			>>> UserMapper.xml中配置
+				<select id="getUserByAddressAndName" resultMap="userMap">
+					SELECT * FROM user2 WHERE address=#{address} AND user_name LIKE concat(#{username},'%')
+				</select>
+				
+		2): 使用javaBean
+			>>> UserMapper中定义方法
+				public ArrayList<User> getUserByAddressAndName (UserParams userParams)
+				
+			>>> UserMapper.xml中配置
+				<select id="getUserByAddressAndName" resultMap="userMap" parameterType="com.cn.UserParams">
+					SELECT * FROM user2 WHERE address=#{address} AND user_name LIKE concat(#{username},'%')
+				</select>
+				
+	d): insert中的主键回填。
+		1): 概念
+			数据插入成功之后会自动给该对象的id属性赋值。值为我们刚刚插入的数据id。（数据库的id字段一般为自增长的，数据添加的时候不含id字段。如果需要获取id数值，那么给方法就可以）
+			
+		2): 使用示例：
+			关键词： useGeneratedKeys， keyProperty
+			<insert id="insertUser" parameterType="u" useGeneratedKeys="true" keyProperty="id">
+				INSERT INTO user2(user_name,password,address) VALUES (#{userName},#{password},#{address})
+			</insert>
+			
+		3): insert中主键自定义
+			>>> 需求： 当我往数据库中插入一条数据的时候，如果此表为空，将此id设置为1，如果不为空，获取其最大的id，并在此基础上加2，作为即将添加数据的id。
+				<insert id="insertUser2" parameterType="u" useGeneratedKeys="true" keyProperty="id">
+					<selectkey keyProperty="id" resultType="long" order="BEFORE">
+						SELECT if(max(id)) is null, 1,max(id)+2 as newId FROM user
+					</selectkey>
+					INSERT INTO user(id,user_name,password,address) VALUES(#{newId},#{username},#{password},#{address})
+				</insert>
+				
+			>>> 特殊说明：
+				selectKey中的order=”BEFORE”表示在插入操作之前选择主键，order的另一个取值AFTER表示执行完插入操作之后再选择主键。
+				
+8：mybatis构建
+	a): java代码构建。（https://blog.csdn.net/u012702547/article/details/54408761）
+	
+	
+	b): XML构建。https://blog.csdn.net/u012702547/article/details/54425130
+		1): 直接声明application.properties
+			(参考：E:\git_save_study\study_info_summary\java\spring\mybatis配置\springboot约定大于配置时候的只需配置properties文件即可\application.properties)
+		
+		2): spring mvc的applicationContent.xm + 自定义的配置文件 + mybatis-conf.xml（参考hermes-orde配置）
+			2.1: applicationContent中引入自定义的配置文件。
+				<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+					<property name="location">
+						<value>classpath:properties/order.web.properties</value>
+					</property>
+				</bean>
+	
+			2.2：applicationContent中引入xml配置文件。
+				<import resource="classpath:spring/hermes-order-jdbc.xml"/>
+				
+				
+			2.3：配置hermes-order-jdbc.xml: Druid数据源配置 + mybatis配置 
+				<!-- mybatis基础配置 -->
+				<bean id="orderSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+					<!--<property name="configLocation" value="classpath:conf/mybatis.xml"/>-->
+					<property name="mapperLocations" value="classpath*:sqlMap/*.xml"/>
+					<property name="dataSource" ref="orderDataSource"/>
+				</bean>
+				<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+					<property name="basePackage" value="com.caocao.hermes.order.dao"/>
+					<property name="sqlSessionFactoryBeanName" value="orderSqlSessionFactory"/>
+				</bean>
+				
+				
+			2.4：mybatis.xml配置。
+				a): 配置dao的别名 + 分页pagehelper。(参考：E:\git_save_study\study_info_summary\java\spring\mybatis配置\mybatis-confc.xml)
+					
+				b): 如果没有mybatis.xml的配置，那么就直接配置在hermes-order-jdbc.xml中。（参考网址:https://www.cnblogs.com/digdeep/p/4608933.html ）
+					<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+					  <property name="dataSource" ref="dataSource"/>
+					  <property name="mapperLocations">
+						<array>
+						  <value>classpath:config/mapper/*.xml</value>
+						</array>
+					  </property>
+					  <property name="typeAliasesPackage" value="com.test.pojo"/>
+					  <property name="plugins">
+						<array>
+						  <bean class="com.github.pagehelper.PageHelper">
+							<property name="properties">
+							  <value>
+								dialect=mysql
+							  </value>
+							</property>
+						  </bean>
+						</array>
+					  </property>
+					</bean>
+				
+				
+	c): mybatis.xml中alias别名使用： https://blog.csdn.net/majinggogogo/article/details/71503263
+		1): 指定特定的接口类别名：
+			1.1: Configuration.xml添加
+				<typeAliases>
+					<typeAlias alias="_Student" type="com.example.springboot.mybatis.model.Student" />
+				</typeAliases>
+				
+			1.2: 别名设置：对应的接口使用alias注解
+				@Alias("_Student")
+				public interface Student {
+				}
+		
+		2): 批量处理接口类：
+			2.1: Configuration.xml文件配置。
+				<typeAliases>
+					<package name="com.example.springboot.mybatis.model"/>
+				</typeAliases>
+				
+			2.2：别名设置，
+				2.2.1：给实体类添加@Alias注解。
+				
+				2.2.2：实体类不加注解的情况下，修改mapper文件中引用的类型别名，改为小写，如下所示：
+			
+			
+	
+9：spring 热部署实现
+	https://blog.csdn.net/jrainbow/article/details/51980036?utm_source=gold_browser_extension
+	
+	
+10： Mybatis中接口和对应的mapper文件位置配置深入剖析。
+	https://blog.csdn.net/lmy86263/article/details/53428417
+	
+	
+11：问题汇总：
+	a): mybatis配置时出现：org.apache.ibatis.binding.BindingException: Invalid bound statement (not found)
+		（参考网站: https://blog.csdn.net/oMrLeft123/article/details/70239951  https://www.cnblogs.com/lfm601508022/p/InvalidBoundStatement.html）
+		1): 错误原因：
+			Mapper interface和xml文件的定义对不上。或者编译后的包中不存在.xml文件。
+		
+		2): 排查方向：
+			1): 检查xml文件所在的package名称是否和interface对应的package名称一一对应。
+			2): 检查xml文件的namespace是否和xml文件的package名称一一对应。
+			3): 检查行数名称是否能对上。
+			4): 去掉xml文件中的中文注释。
+			5): 随意在xml文件中加一个空格或者空行然后保存。
+		
+		3): 终极大招：（如果上述排除没有问题，但是还是报错，那么情况下面对策。）
+			1): 确认xml编译后,打包时*Mapper.xml没有自动复制到target -> class输出目录的mapper类包下？
+			
+			2): 如果没有，那么在pom文件下添加如下信息：
+				<build>
+				　　<resources>
+				　　　　<resource>
+				　　　　　　　　<directory>src/main/java</directory>
+				　　　　　　<includes>
+				　　　　　　　　<include>**/*.xml</include>
+				　　　　　　</includes>
+				　　　　</resource>
+				　　　　<resource>
+				　　　　　　<directory>src/main/resources</directory>
+				　　　　</resource>
+				　　</resources>
+				</build>
+			
+	b): 页面渲染失败：Could not resolve view with name 'xxx' in servlet with name dispatcherServlet
+		1): 原因pom文件中缺少了spring模板，需要在pom添加如下模块：
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			</dependency>
+		
+		2): 参考网站： https://www.imooc.com/qadetail/194867?t=341887 
+		
+	c): 访问templates总的模块文件提示：Error resolving template template might not exist or might not be accessible
+		1): 确认方向。
+			@Controller中返回的是模块的名称，不需要在加/. 例如： return "render"。 而不是: "/render"
+			
+		2): 确认pom中build配置中要包含：template目录。
+			<build>
+				<resource>
+					<directory>src/main/resources</directory>
+				</resource>
+			</build>
+			
+	d): 自定义handler异常不起作用。
+		1): 原因：
+			自定义的handler文件夹和我发送请求的Controller不在同一package目录下。
+			
+		2): 解决方法：（https://blog.csdn.net/evanxuhe/article/details/78650979）
+			确保handler和controller处于同一module下。
+		
+12：json字符串展示，分页使用效果
+	a): pagehelp
+		1): 使用参考文档： https://github.com/pagehelper/Mybatis-PageHelper/blob/master/wikis/zh/HowToUse.md
+
+
+13：springboot运行的三种方法：
+	a): IDE下运行application main方法
+	
+	b): 在springboot的应用根目录下运行mvn spring-boot:run
+	
+	c): 使用mvn install 生成jar包后运行
+		step 1: 进入到项目的根目录
+		
+		step2: mvn install 
+		
+		step3: cd target
+		
+		step4: java -jar myspringboot-0.0.1-SHAPSHOT.jar
+		
+14: 好用的插件：
+	a): Free MyBatis plugin。（mapper.xml 和 interface mapper映射。）
+	
+	b): lombok: (自动完成setter、getter等)
+		
+		
+
+15：下午的任务：
+	jpa使用 
+	
+	chase 单元测试用例  ==》已完成
+	
+	devtools

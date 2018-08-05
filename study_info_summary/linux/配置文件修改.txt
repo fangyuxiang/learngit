@@ -1,0 +1,42 @@
+1): sed 命令汇总
+	a): 获取eth0的ip
+		ifconfig eth0 | sed -n '/inet addr/p' |  awk '{print $2}' | awk -F: '{print $2}'
+		
+		
+		prfm14: 10.80.223.38
+		
+		prfm09: 10.80.66.46
+		
+		
+		prfm11: 47.96.253.22
+		
+		
+		
+		ssh-copy-id -i ~/.ssh/id_rsa.pub root@10.80.223.38
+		
+		
+		prfm14: telegraf_install.sh
+		
+		
+		跳板机：
+			ssh文件密钥： b4PBcCf3cGVt0EXI
+			
+			
+			
+	
+operadmin下添加jenkins的pub_key:(已完成)
+	prfm01
+	prfm11
+	prfm07
+	
+	
+	
+	
+	scp： admin权限
+	
+	service stop/start rpm -ivh : operadmin权限。
+	
+	
+	Created symlink from /etc/systemd/system/multi-user.target.wants/telegraf.service to /usr/lib/systemd/system/telegraf.service.
+	
+    ps -ef | grep -v grep | grep config | grep telegraf.conf | awk '{print $2}' | xargs kill -9

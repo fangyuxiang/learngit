@@ -764,6 +764,30 @@ b): 举例
    ```
 
 
+### docker commit保存修改
+
+1. 查看当前容器id
+
+   ```markdown
+   [zzq@weekend110 ~]$ docker ps
+   	CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+   	96621f37028c        0ef2e08ed3fa        "/bin/bash"         3 minutes ago       Up 3 minutes                            thirsty_torvalds
+   ```
+
+2. commit保存修改
+
+   ```markdown
+   [zzq@weekend110 ~]$ docker commit 96621f37028c 0ef2e08ed3fa
+   	sha256:919694de9dda0f070de8839284e0a3b8f03e9bf88207111e144986d3aaefb2a9
+   ```
+
+   ​
+
+
+
+
+
+
 
 ## 问题汇总
 

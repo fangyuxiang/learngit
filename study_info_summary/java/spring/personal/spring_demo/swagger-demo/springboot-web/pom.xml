@@ -23,6 +23,12 @@
             <artifactId>springboot-common</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>springboot-dal</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!--此依赖如果没有引入,那么视图就无法渲染,-->
         <!--spring模板引擎-->
         <!--website: https://www.imooc.com/qadetail/194867?t=341887 -->

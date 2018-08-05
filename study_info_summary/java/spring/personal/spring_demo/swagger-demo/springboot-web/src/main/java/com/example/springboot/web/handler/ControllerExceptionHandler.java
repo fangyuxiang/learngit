@@ -1,6 +1,7 @@
 package com.example.springboot.web.handler;
 
 import com.example.springboot.common.exception.DemoMyBatisException;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -26,4 +27,6 @@ public class ControllerExceptionHandler {
         result.put("message", ex.getMessage());
         return result;
     }
+
+
 }

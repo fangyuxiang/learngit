@@ -184,3 +184,260 @@ ctrl + k: 往后退一行
 	:set noautoindent
 ```
 
+[vim配置]: https://blog.csdn.net/u010871058/article/details/54253774
+
+### 数组
+
+```shell
+#!/bin/sh
+#定义方法一 数组定义为空格分割
+arrayWen=(a b c d e f)
+#定义方法二
+arrayXue[0]="m"
+arrayXue[1]="n"
+arrayXue[2]="o"
+arrayXue[3]="p"
+arrayXue[4]="q"
+arrayXue[5]="r"
+#打印数组长度
+echo ${#arrayWen[@]}
+#for 循环遍历 
+for var in ${arrayWen[@]};
+do
+	echo $var
+done
+#while循环遍历
+i=0
+while [[ i -lt ${#arrayXue[@]} ]]; do
+	echo ${arrayXue[i]}
+	let i++
+done
+
+```
+
+### 查看系统相关的信息
+
+1. 查看系统版本
+
+   ```shell
+   cat /proc/version
+   ```
+
+2. 查看系统处理器
+
+   ```markdown
+   cat /proc/cpuinfo
+   ```
+
+3. 查看程序是否安装
+
+   ```markdown
+   rpm -qa | grep telegraf
+   ```
+
+### scp
+
+1. 拷贝文件
+
+   ```markdown
+   scp file.txt ip:/target
+   ```
+
+2. 拷贝目录
+
+   ```markdown
+   scp -r dir/ ip:/target
+   ```
+
+### rm
+
+1. 删除文件
+
+   ```markdown
+   rm file
+   ```
+
+2. 删除目录
+
+   ```markdown
+   rm -d dir
+   ```
+
+### ssh免密钥登陆
+
+1. 实现方式
+
+   ```markdown
+   当前机台的公钥复制到需要访问的机器中。（id_rsa.pub）
+   ```
+
+2. 将当前机器的公钥复制到目标机台中
+
+   ```markdown
+   ssh-copy-id -i ~/.ssh/id_rsa.pub admin@10.80.223.38
+   ```
+
+3. 命令验证
+
+   ```markdown
+   ssh 10.80.223.38 ===> 登陆连接成功
+   ```
+
+4. 脚本验证
+
+   ```markdown
+   java程序中使用: id_rsa 私钥进行登录。
+   ```
+
+### kill进程
+
+```markdown
+ps -ef | grep -v "grep" | grep serverName | awk '{print $2}' | xargs kill -9
+```
+
+### tar.gz
+
+```markdown
+1. 打包
+	tar -zcvf target.tar.gz target
+2. 解压
+	tar -zxvf target.tar.gz
+3. 打包telegaf.d
+	 sudo tar -zcvf telegrafd.tar.gz exec_*
+4. 打包exec_*.sh
+	sudo tar -zcvf execShell.tar.gz exec_*.sh
+```
+
+### vim
+
+1. 删除指定行
+
+   ```shell
+   :3,5d
+   ```
+
+2. 全局替换
+
+   ```markdown
+   :%s/target/new/g
+   ```
+
+3. 获取当前目录路径
+
+   ```shell
+   dirpath=$(cd `dirname $0`; pwd)
+   ```
+
+### if
+
+1. 变量通过""引号
+
+   ```shell
+   #!/bin/bash
+   var='hello'
+   if [ ! -n "$var"]; then
+   	echo "Is null"
+   else
+   	echo "not null"
+   fi
+   ```
+
+2. 直接通过变量判断
+
+   ```shell
+   #!/bin/bash
+   if [ ! $var ]; then
+   	echo "is null"
+   else:
+   	echo "not null"
+   fi
+   ```
+
+3. 使用test判断
+
+   ```shell
+   #!/bin/bash
+   var=
+   if test -z "$var"
+   then
+    	echo "var is not set!"
+   else
+   	echo "var is set"
+   fi
+   ```
+
+   ​
+
+### sed
+
+1. 获取ip
+
+   ```shell
+   a): 获取eth0的ip
+   	ifconfig eth0 | sed -n '/inet addr/p' |  awk '{print $2}' | awk -F: '{print $2}'
+   ```
+
+   ​
+
+### cron
+
+1. 格式说明
+
+   ```shell
+   a): 语法
+   	*****(5个*)
+   	第一个*表示分钟，取值0-59
+   	第二个*表示小时，取值0-23
+   	第三个*表示一个月的第几天，取值1-31
+   	第四个*表示第几个月，取值1-12
+   	第五个*表示一周中的第几天，取值0-7，其中0和7都表示周日。
+   ```
+
+2. 示例说明
+
+   ```shell
+   【每个15分钟】
+   	H/15 * * * *
+   【在每个小时的前半个小时内的每10分钟】
+   	H(0-29)/10 * * * *
+   【每两小时45分钟，从上午9:45开始，每天下午3:45结束】
+   	45 9-16/2 * * *
+   【每两小时一次，每个工作日上午9点到下午5点】
+   	H 9-16/2 * * 1-5
+   【每隔两小时构建一次】
+   	H H/2 * * *
+   【每天中午下班前构建一次】
+   	0-12 * * * *
+   ```
+
+3. 表格参考
+
+   | 字段                 | *    | *    | *      | *    | *     |
+   | ------------------ | ---- | ---- | ------ | ---- | ----- |
+   | 含义                 | 分钟   | 小时   | 日期     | 月份   | 星期    |
+   | 取值范围               | 0-59 | 0-23 | 1-31   | 1-12 | 0-7   |
+   | 示例                 |      |      |        |      |       |
+   | 每个两小时执行一次          | H    | H/2  | *      | *    | *     |
+   | 每隔3天执行一次           | H    | H    | H/3    | *    |       |
+   | 每个3天执行一次(每月的1-15号) | H    | H    | 1-15/3 | *    | *     |
+   | 每周1,3,5执行一次        | H    | H    | *      | *    | 1,3,5 |
+
+
+### echo
+
+1. 换行输出
+
+   ```shell
+   echo -e "hello liunx"
+   ```
+
+### ls -F
+
+1. 输出服务类型，并截取
+
+   ```shell
+   ls -F /usr/local/tomcat/ | grep '@$' 2>/dev/null | awk '{print substr($1,1,length()-1)}'
+   ```
+
+   ​
+
